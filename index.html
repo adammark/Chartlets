@@ -340,11 +340,8 @@ li strong {
 
   <p>The <code>update</code> method helps you re-render charts with new data or simply drop in default data after it is loaded. Below, the <code>&lt;canvas&gt;</code> element with ID <code>"demo"</code> is updated with new values every 500ms.</p>
 
-  <table class="examples">
-    <tbody>
-      <tr>
-        <td><canvas class="chartlet" id="demo" data-type="line" data-colors="#ffcc00 #ff66cc" data-range="0 10" data-sets="[2 3 5 3 6 3 7 8 4 2] [8 3 4 7 2 7 2 4 6 1]" width="100" height="55" data-opts="stroke:2 shape:smooth"></canvas></td>
-        <td>
+  <canvas class="chartlet" id="demo" data-type="line" data-colors="#ffcc00 #ff66cc" data-range="0 10" data-sets="[2 3 5 3 6 3 7 8 4 2] [8 3 4 7 2 7 2 4 6 1]" width="150" height="55" data-opts="stroke:2 shape:smooth"></canvas>
+
 <pre>
 var a = [2, 3, 5, 3, 6, 3, 7, 8, 4, 2];
 var b = [8, 3, 4, 7, 2, 7, 2, 4, 6, 1];
@@ -358,10 +355,6 @@ setInterval(function() {
   <span class="highlight">Chartlets.update("demo", [a, b]);</span>
 }, 500);
 </pre>
-        </td>
-      </tr>
-    </tbody>
-  </table>
 
   <script>
     var _a = [2, 3, 5, 3, 6, 3, 7, 8, 4, 2];
