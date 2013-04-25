@@ -400,6 +400,20 @@
     }
   }
 
+  function interpolate(aset, bset, n) {
+    var i, j, result = [];
+
+    for (i = 0; i < aset.length; i++) {
+      result[i] = [];
+
+      for (j = 0; j <= n; j++) {
+        result[i].push(aset[i] + ((bset[i] - aset[i]) * (j / n)));
+      }
+    }
+
+    return result;
+  }
+
   renderers = {
     line: function () {
       var i, set, strokeStyle, fillStyle, alphaMultiplier, offset;
