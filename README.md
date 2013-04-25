@@ -3,10 +3,10 @@
 Chartlets are tiny charts without grids or legends, like [Sparklines][1]. They're 
 good at conveying simple relationships or trends, especially when space is scarce.
 
-See examples and documentation at [Chartlets.com].
+See examples and documentation at [chartlets.com][2].
 
 &copy; 2013 Adam Mark. [MIT License][3]
 
 [1]: http://en.wikipedia.org/wiki/Sparklines
-[2]: http://www.chartlets.com
+[2]: http://www.adammark.net/Chartlets
 [3]: http://opensource.org/licenses/MIT
