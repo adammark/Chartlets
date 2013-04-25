@@ -8,5 +8,5 @@ See examples and documentation at [chartlets.com][2].
 &copy; 2013 Adam Mark. [MIT License][3]
 
 [1]: http://en.wikipedia.org/wiki/Sparklines
-[2]: http://www.adammark.net/Chartlets
+[2]: http://chartlets.com
 [3]: http://opensource.org/licenses/MIT
