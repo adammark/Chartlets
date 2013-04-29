@@ -400,18 +400,59 @@
     }
   }
 
-  function interpolate(aset, bset, n) {
-    var i, j, result = [];
+  function interpolate(a, b, idx, len) {
+    return +a + ((+b - +a) * (idx / len));
+  }
 
-    for (i = 0; i < aset.length; i++) {
-      result[i] = [];
+  function interpolateSet(a, b, n) {
+    var i, j, c = [a];
 
-      for (j = 0; j <= n; j++) {
-        result[i].push(aset[i] + ((bset[i] - aset[i]) * (j / n)));
+    for (i = 0; i < a.length; i++) {
+      for (j = 1; j < n; j++) {
+        if (!c[j]) {
+          c[j] = [];
+        }
+
+        c[j][i] = interpolate(a[i], b[i], j, n);
       }
     }
 
-    return result;
+    return c.concat([b]);
+  }
+
+  function interpolateSets(a, b, n) {
+    var i, c = [];
+
+    for (i = 0; i < a.length; i++) {
+      c.push(interpolateSet(a[i], b[i], n));
+    }
+
+    return c;
+  }
+
+  function Transition(id, asets, bsets) {
+    var interpolated = interpolateSets(asets, bsets, 10);
+    var i = 0;
+    var j = 0;
+    var set;
+
+    if (!asets.length) {
+      return Chartlets.update(id, bsets);
+    }
+
+    var interval = setInterval(function() {
+      set = [];
+
+      for (j = 0; j < interpolated.length; j++) {
+        set.push(interpolated[j][i]);
+      }
+
+      Chartlets.update(id, set);
+
+      if (++i === set[0].length) {
+        clearInterval(interval);
+      }
+    }, 20);
   }
 
   renderers = {
@@ -533,18 +574,26 @@
       return themes[name];
     },
 
-    // TODO animate
-    update: function (id, _sets) {
-      var i, elem, a = [];
+    update: function (id, _sets, options) {
+      var elem = document.getElementById(id);
 
-      for (i = 0; i < _sets.length; i++) {
-        a.push(_sets[i].join(" "));
+      function _render() {
+        var i, a = [];
+
+        for (i = 0; i < _sets.length; i++) {
+          a.push(_sets[i].join(" "));
+        }
+
+        elem.setAttribute("data-sets", "[" + a.join("] [") + "]");
+
+        Chartlets.render([elem]);
       }
 
-      elem = document.getElementById(id);
-      elem.setAttribute("data-sets", "[" + a.join("] [") + "]");
+      if (options && options.animate) {
+        return new Transition(id, parseVals(elem.getAttribute("data-sets")), _sets);
+      }
 
-      this.render([elem]);
+      _render();
     }
   };
 
