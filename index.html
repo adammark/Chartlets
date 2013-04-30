@@ -248,7 +248,7 @@ li strong {
 
   <p>Instead of specifying an array of colors, you can apply a color theme:</p>
   <p><code>&lt;canvas class="chartlet" ... <span class="highlight">data-opts="theme:money"</span>&gt;&lt;/canvas&gt;</code></p>
-  <p>Pick from one of ten themes, each with five colors:</p>
+  <p>Pick from one of ten built-in themes, each with five colors:</p>
 
   <div class="swatch">
     <canvas class="chartlet" data-type="bar" data-range="0 2" data-sets="[1] [1.5] [1] [1.5] [1]" width="85" height="35" data-opts="orient:side theme:blues"></canvas>
@@ -300,13 +300,11 @@ li strong {
     <p>fire</p>
   </div>
 
-  <h4>Custom Themes</h4>
+  <p>Or create a custom theme using any number and combination of hex, RGB(A) or HSL(A) strings:</p>
 
-  <p>You can create your own themes using any combination of hex, RGB(A) or HSL(A) strings:</p>
+  <code>Chartlets.setTheme("rainbow", ["#eb1f1f", "#fcb13a", "#ffd026"]);</code>
 
-  <code>Chartlets.setTheme("carnival", ["#2c7d45", "#ab930c", "#9201bc", "#82be8f", "#9d8a47"]);</code>
-
-  <p>Or retrieve a theme as an array of colors:</p>
+  <p>To load colors for a particular theme:</p>
 
   <code>var colors = Chartlets.getTheme("money");</code>
 </section>
