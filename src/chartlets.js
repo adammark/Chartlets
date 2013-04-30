@@ -1,5 +1,5 @@
 /*
-  Chartlets v0.9: http://github.com/adammark/Chartlets
+  Chartlets v0.9.1: http://chartlets.com
   MIT License
   (c) 2013 Adam Mark
 */
