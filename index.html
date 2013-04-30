@@ -130,7 +130,7 @@ li strong {
   <h3>Line charts</h3>
   <canvas class="chartlet" data-type="line" data-colors="#ffcc00 #ff66cc" data-range="0 10" data-sets="[1 5 3 9 4] [4 3 9 7 2]" width="100" height="55" data-opts="stroke:2 shape:smooth"></canvas>
   <canvas class="chartlet" data-type="line" data-colors="#ffcc00 #9966ff" data-range="0 10" data-sets="[1 5 3 9 4] [4 3 9 7 2]" width="100" height="55" data-opts="stroke:2 shape:smooth cap:circle"></canvas>
-  <canvas class="chartlet" data-type="line" data-range="0 10" data-sets="[1 5 3 9 4] [4 3 9 7 2]" width="100" height="55" data-opts="stroke:1 shape:smooth fill:solid theme:basic"></canvas>
+  <canvas class="chartlet" data-type="line" data-range="0 10" data-sets="[1 5 3 9 4] [4 3 9 7 2]" width="100" height="55" data-opts="stroke:1 shape:smooth fill:solid theme:blues"></canvas>
   <canvas class="chartlet" data-type="line" data-colors="hsla(319,83%,65%) hsl(200,83%,50%)" data-sets="[10 15 10 16 20 15 16 14 9] [5 12 15 20 14 -2 -5 8 15]" width="100" height="55" data-opts="stroke:1 fill:solid axis:0"></canvas>
   <canvas class="chartlet" data-type="line" data-range="0 15" data-sets="[1 3 2 4 5 3 4 2 3 4 2 3 3 2 3 4 5 2 3 4] [7 8 7 6 7 9 8 7 8 7 7 6 6 5 6 7 6 7 5 6] [10 11 12 12 10 13 14 15 12 10 11 11 13 14 13 12 10 11 12 10]" width="100" height="55" data-opts="stroke:2 theme:money"></canvas>
   <canvas class="chartlet" data-type="line" data-sets="[1 5 3 9 4] [4 3 4 7 2] [1 2 3 3 2]" width="100" height="55" data-opts="stroke:1 shape:smooth transform:stack theme:money"></canvas>
@@ -145,15 +145,15 @@ li strong {
 <section id="showcase-bar">
   <h3>Bar charts</h3>
   <canvas class="chartlet" data-type="bar" data-colors="rgb(249,40,48) rgb(47,180,177) rgb(255,168,57)" data-range="0 15" data-sets="[1 2 3 4] [2 3 4 5] [3 4 5 6]" width="100" height="50" data-opts="transform:stack"></canvas>
-  <canvas class="chartlet" data-type="bar" data-range="0 15" data-sets="[1 2 3 4] [2 3 4 5] [3 4 5 6]" width="100" height="50" data-opts="orient:horiz transform:stack theme:circus"></canvas>
+  <canvas class="chartlet" data-type="bar" data-range="0 15" data-sets="[1 2 3 4] [2 3 4 5] [3 4 5 6]" width="100" height="50" data-opts="orient:horiz transform:stack theme:ocean"></canvas>
   <canvas class="chartlet" data-type="bar" data-colors="hsl(34,57%,50%) hsl(194,67%,50%) hsl(49,89%,60%)" data-sets="[1 2 3 4] [2 3 4 5] [3 4 5 6]" width="100" height="50"></canvas>
   <canvas class="chartlet" data-type="bar" data-sets="[1 2 -3 -4] [2 3 -2 -3]" width="100" height="50" data-opts="theme:money axis:0"></canvas>
-  <canvas class="chartlet" data-type="bar" data-range="0 6" data-sets="[3] [4] [2] [3] [5]" width="100" height="50" data-opts="theme:basic"></canvas>
+  <canvas class="chartlet" data-type="bar" data-range="0 6" data-sets="[3] [4] [2] [3] [5]" width="100" height="50" data-opts="theme:blues"></canvas>
 </section>
 
 <section id="showcase-pie">
   <h3>Pie charts</h3>
-  <canvas class="chartlet" data-type="pie" data-sets="[1 2 3]" width="75" height="75" data-opts="theme:basic"></canvas>
+  <canvas class="chartlet" data-type="pie" data-sets="[1 2 3]" width="75" height="75" data-opts="theme:blues"></canvas>
   <canvas class="chartlet" data-type="pie" data-sets="[1 2 3 4 5]" width="75" height="75" data-opts="theme:circus"></canvas>
   <canvas class="chartlet" data-type="pie" data-sets="[15 35 20 15 10]" width="75" height="75" data-opts="theme:money"></canvas>
 </section>
@@ -218,7 +218,7 @@ li strong {
 
 <section id="types">
   <h3>Chart Types</h3>
-  <p>Chartlets supports three basic chart types:</p>
+  <p>Chartlets supports three blues chart types:</p>
   <p><code>&lt;canvas class="chartlet" <span class="highlight">data-type="line"</span> ...&gt;&lt;/canvas&gt;</code></p>
   <p><code>&lt;canvas class="chartlet" <span class="highlight">data-type="bar"</span> ...&gt;&lt;/canvas&gt;</code></p>
   <p><code>&lt;canvas class="chartlet" <span class="highlight">data-type="pie"</span> ...&gt;&lt;/canvas&gt;</code></p>
@@ -247,62 +247,62 @@ li strong {
   <h4>Themes</h4>
 
   <p>Instead of specifying an array of colors, you can apply a color theme:</p>
-  <p><code>&lt;canvas class="chartlet" ... <span class="highlight">data-opts="theme:disco"</span>&gt;&lt;/canvas&gt;</code></p>
-  <p>Pick from one of ten themes, each with six colors:</p>
+  <p><code>&lt;canvas class="chartlet" ... <span class="highlight">data-opts="theme:money"</span>&gt;&lt;/canvas&gt;</code></p>
+  <p>Pick from one of ten themes, each with five colors:</p>
 
   <div class="swatch">
-    <canvas class="chartlet" data-type="bar" data-range="0 2" data-sets="[1] [1.5] [1] [1.5] [1] [1.5]" width="100" height="35" data-opts="orient:side theme:basic"></canvas>
-    <p>basic</p>
+    <canvas class="chartlet" data-type="bar" data-range="0 2" data-sets="[1] [1.5] [1] [1.5] [1]" width="85" height="35" data-opts="orient:side theme:blues"></canvas>
+    <p>blues</p>
   </div>
 
   <div class="swatch">
-    <canvas class="chartlet" data-type="bar" data-range="0 2" data-sets="[1] [1.5] [1] [1.5] [1] [1.5]" width="100" height="35" data-opts="orient:side theme:money"></canvas>
+    <canvas class="chartlet" data-type="bar" data-range="0 2" data-sets="[1] [1.5] [1] [1.5] [1]" width="85" height="35" data-opts="orient:side theme:money"></canvas>
     <p>money</p>
   </div>
 
   <div class="swatch">
-    <canvas class="chartlet" data-type="bar" data-range="0 2" data-sets="[1] [1.5] [1] [1.5] [1] [1.5]" width="100" height="35" data-opts="orient:side theme:circus"></canvas>
+    <canvas class="chartlet" data-type="bar" data-range="0 2" data-sets="[1] [1.5] [1] [1.5] [1]" width="85" height="35" data-opts="orient:side theme:circus"></canvas>
     <p>circus</p>
   </div>
 
   <div class="swatch">
-    <canvas class="chartlet" data-type="bar" data-range="0 2" data-sets="[1] [1.5] [1] [1.5] [1] [1.5]" width="100" height="35" data-opts="orient:side theme:todo"></canvas>
-    <p>todo</p>
+    <canvas class="chartlet" data-type="bar" data-range="0 2" data-sets="[1] [1.5] [1] [1.5] [1]" width="85" height="35" data-opts="orient:side theme:party"></canvas>
+    <p>party</p>
   </div>
 
   <div class="swatch">
-    <canvas class="chartlet" data-type="bar" data-range="0 2" data-sets="[1] [1.5] [1] [1.5] [1] [1.5]" width="100" height="35" data-opts="orient:side theme:todo"></canvas>
-    <p>todo</p>
+    <canvas class="chartlet" data-type="bar" data-range="0 2" data-sets="[1] [1.5] [1] [1.5] [1]" width="85" height="35" data-opts="orient:side theme:garden"></canvas>
+    <p>garden</p>
   </div>
 
   <div class="swatch">
-    <canvas class="chartlet" data-type="bar" data-range="0 2" data-sets="[1] [1.5] [1] [1.5] [1] [1.5]" width="100" height="35" data-opts="orient:side theme:todo"></canvas>
-    <p>todo</p>
+    <canvas class="chartlet" data-type="bar" data-range="0 2" data-sets="[1] [1.5] [1] [1.5] [1]" width="85" height="35" data-opts="orient:side theme:crayon"></canvas>
+    <p>crayon</p>
   </div>
 
   <div class="swatch">
-    <canvas class="chartlet" data-type="bar" data-range="0 2" data-sets="[1] [1.5] [1] [1.5] [1] [1.5]" width="100" height="35" data-opts="orient:side theme:todo"></canvas>
-    <p>todo</p>
+    <canvas class="chartlet" data-type="bar" data-range="0 2" data-sets="[1] [1.5] [1] [1.5] [1]" width="85" height="35" data-opts="orient:side theme:ocean"></canvas>
+    <p>ocean</p>
   </div>
 
   <div class="swatch">
-    <canvas class="chartlet" data-type="bar" data-range="0 2" data-sets="[1] [1.5] [1] [1.5] [1] [1.5]" width="100" height="35" data-opts="orient:side theme:todo"></canvas>
-    <p>todo</p>
+    <canvas class="chartlet" data-type="bar" data-range="0 2" data-sets="[1] [1.5] [1] [1.5] [1]" width="85" height="35" data-opts="orient:side theme:spring"></canvas>
+    <p>spring</p>
   </div>
 
   <div class="swatch">
-    <canvas class="chartlet" data-type="bar" data-range="0 2" data-sets="[1] [1.5] [1] [1.5] [1] [1.5]" width="100" height="35" data-opts="orient:side theme:todo"></canvas>
-    <p>todo</p>
+    <canvas class="chartlet" data-type="bar" data-range="0 2" data-sets="[1] [1.5] [1] [1.5] [1]" width="85" height="35" data-opts="orient:side theme:beach"></canvas>
+    <p>beach</p>
   </div>
 
   <div class="swatch">
-    <canvas class="chartlet" data-type="bar" data-range="0 2" data-sets="[1] [1.5] [1] [1.5] [1] [1.5]" width="100" height="35" data-opts="orient:side theme:todo"></canvas>
-    <p>todo</p>
+    <canvas class="chartlet" data-type="bar" data-range="0 2" data-sets="[1] [1.5] [1] [1.5] [1]" width="85" height="35" data-opts="orient:side theme:fire"></canvas>
+    <p>fire</p>
   </div>
 
   <h4>Custom Themes</h4>
 
-  <p>You can set your own themes using any combination of hex, RGB(A) or HSL(A) strings:</p>
+  <p>You can create your own themes using any combination of hex, RGB(A) or HSL(A) strings:</p>
 
   <code>Chartlets.setTheme("carnival", ["#2c7d45", "#ab930c", "#9201bc", "#82be8f", "#9d8a47"]);</code>
 
@@ -319,7 +319,7 @@ li strong {
   <h4>Global options</h4>
   <ul>
     <li><p><strong>bgcolor</strong> sets the background color of the entire chart. It can be in hex, RGB(A) or HSL(A) notation. The default value is <code>#fff</code> (white).</p></li>
-    <li><p><strong>theme</strong> sets the color theme for the data visualization, overriding any colors specified in <code>data-colors</code>. If no theme is specified and <code>data-colors</code> is empty, the "basic" theme is applied.</p></li>
+    <li><p><strong>theme</strong> sets the color theme for the data visualization, overriding any colors specified in <code>data-colors</code>. If no theme is specified and <code>data-colors</code> is empty, the "blues" theme is applied.</p></li>
   </ul>
 
   <h4>Line options</h4>
