@@ -1,10 +1,10 @@
 /*
-  Chartlets v0.9.2: http://chartlets.com
+  Chartlets v0.9.3: http://chartlets.com
   MIT License
   (c) 2013 Adam Mark
 */
-(function (doc) {
-  var type, ctx, width, height, rotated, range, sets, opts, colors, themes, renderers;
+(function (win) {
+  var type, ctx, width, height, rotated, range, sets, opts, colors, themes, renderers, animate;
 
   type = null;
   ctx = null;
@@ -14,6 +14,7 @@
   range = [0, 0];
   sets = [];
   opts = {};
+
   themes = {
     "blues":    ["#7eb5d6", "#2a75a9", "#214b6b", "#dfc184", "#8f6048"],
     "money":    ["#009b6d", "#89d168", "#d3eb87", "#666666", "#aaaaaa"],
@@ -26,6 +27,15 @@
     "beach":    ["#f92830", "#2fb4b1", "#ffa839", "#3375cd", "#5fd1d5"],
     "fire":     ["#dc143c", "#ff8c00", "#ffcc33", "#b22222", "#cd8540"]
   };
+
+  animate =
+    win.requestAnimationFrame || 
+    win.webkitRequestAnimationFrame ||
+    win.mozRequestAnimationFrame ||
+    win.msRequestAnimationFrame ||
+    function (callback) {
+      win.setTimeout(callback, 1000 / 60);
+    };
 
   function parseAttr(elem, attr) {
     var val = elem.getAttribute(attr);
@@ -429,13 +439,13 @@
   }
 
   function Transition(id, asets, bsets) {
-    var i = 0, j = 0, set, interval, interpolated = interpolateSets(asets, bsets, 10);
+    var i = 0, j = 0, set, interpolated = interpolateSets(asets, bsets, 15);
 
     if (!asets.length) {
       return Chartlets.update(id, bsets);
     }
 
-    interval = setInterval(function() {
+    function _render() {
       set = [];
 
       for (j = 0; j < interpolated.length; j++) {
@@ -444,10 +454,12 @@
 
       Chartlets.update(id, set);
 
-      if (++i === set[0].length) {
-        clearInterval(interval);
+      if (++i < set[0].length) {
+        animate(_render);
       }
-    }, 20);
+    }
+
+    animate(_render);
   }
 
   renderers = {
@@ -547,12 +559,12 @@
 
   };
 
-  window.Chartlets = {
+  win.Chartlets = {
     render: function (elems) {
       var i;
 
       if (!elems) {
-        elems = [].slice.call(doc.getElementsByClassName("chartlet"));
+        elems = [].slice.call(document.getElementsByClassName("chartlet"));
       }
 
       for (i = 0; i < elems.length; i++) {
@@ -586,4 +598,4 @@
     }
   };
 
-}(document));
+}(window));
