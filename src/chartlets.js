@@ -571,7 +571,7 @@
     update: function (id, _sets, options) {
       var i, a = [], elem = document.getElementById(id);
 
-      if (options && options.animate) {
+      if (options && options.transition) {
         new Transition(id, parseVals(elem.getAttribute("data-sets")), _sets);
         return;
       }
