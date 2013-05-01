@@ -84,13 +84,20 @@ td, th {
   padding: 1px 2px;
   border-radius: 4px;
 }
-.swatch {
+.swatch, .tx {
   display: inline-block;
 }
 .swatch p {
   margin: 4px 0;
   color: #999;
   font-size: 90%;
+}
+.tx {
+  margin: 10px 10px 10px 0;
+}
+.tx canvas {
+  display: block;
+  margin-bottom: 6px;
 }
 code, pre {
   font-family: Monaco, Courier, monospace;
@@ -337,9 +344,6 @@ li strong {
     <li><p><strong>transform</strong> specifies how to structure the data sets. Acceptable values are <code>none</code> and <code>stack</code>. If <code>stack</code>, data sets are "stacked" bottom to top. The default value is <code>none</code>.</p></li>
     <li><p><strong>axis</strong> renders an axis line at the given y-value.</p></li>
   </ul>
-
-  <h4>Pie options</h4>
-  <p>None yet. :(</p>
 </section>
 
 <section id="updating">
@@ -364,17 +368,70 @@ setInterval(function() {
 </pre>
 
   <script>
-    var _a = [2, 3, 5, 3, 6, 3, 7, 8, 4, 2];
-    var _b = [8, 3, 4, 7, 2, 7, 2, 4, 6, 1];
+    (function () {
+      var a = [2, 3, 5, 3, 6, 3, 7, 8, 4, 2];
+      var b = [8, 3, 4, 7, 2, 7, 2, 4, 6, 1];
 
-    setInterval(function() {
-      _a.push(Math.ceil(Math.random() * 9));
-      _b.push(Math.ceil(Math.random() * 9));
-      _a.shift();
-      _b.shift();
+      setInterval(function() {
+        a.push(Math.ceil(Math.random() * 9));
+        b.push(Math.ceil(Math.random() * 9));
+        a.shift();
+        b.shift();
 
-      Chartlets.update("demo", [_a, _b]);
-    }, 500);
+        Chartlets.update("demo", [a, b]);
+      }, 500);
+    }());
+  </script>
+
+</section>
+
+<section id="transitions">
+  <h3>Transitions</h3>
+
+  <p>When updating data, you can apply a transition effect if the old and new data structures are identical. For example:</p>
+
+  <code>Chartlets.update("my-chart-id", [[1,2,3], [4,5,6]], <span class="highlight">{ transition: "linear" }</span>);</code>
+
+  <p>The only transition type is "linear." Try it out below:</p>
+
+  <div class="tx">
+    <canvas id="tx_line" class="chartlet" data-type="line" data-sets="[1 2 3 4 5 6 7 8] [8 7 6 5 4 3 2 1]" width="125" height="55" data-opts="cap:circle stroke:2 theme:party"></canvas>
+    <button onclick="tx_demo('tx_line')">Update</button>
+  </div>
+
+  <div class="tx">
+    <canvas id="tx_line_stack" class="chartlet" data-type="line" data-sets="[1 2 3 4 5 6 7 8] [1 2 3 4 5 6 7 8]" width="125" height="55" data-opts="transform:stack theme:beach"></canvas>
+    <button onclick="tx_demo('tx_line_stack')">Update</button>
+  </div>
+
+  <div class="tx">
+    <canvas id="tx_bar" class="chartlet" data-type="bar" data-sets="[1 2 3 4 5 6 7 8] [8 7 6 5 4 3 2 1]" width="125" height="55" data-opts="theme:crayon"></canvas>
+    <button onclick="tx_demo('tx_bar')">Update</button>
+  </div>
+
+  <div class="tx">
+    <canvas id="tx_bar_stack" class="chartlet" data-type="bar" data-sets="[1 2 3 4 5 6 7 8] [3 3 3 3 3 3 3 3]" width="125" height="55" data-opts="transform:stack theme:ocean"></canvas>
+    <button onclick="tx_demo('tx_bar_stack')">Update</button>
+  </div>
+
+  <div class="tx">
+    <canvas id="tx_pie" class="chartlet" data-type="pie" data-sets="[1 1 1 1 1 1 1 1]" data-colors="#9351a4 #ff99cc #e31a1c #66cdaa #ffcc33 #f92830 #2fb4b1 #ffa839" width="65" height="65"></canvas>
+    <button onclick="tx_demo('tx_pie')">Update</button>
+  </div>
+
+  <script>
+  function tx_demo(id) {
+    var a = [];
+    var b = [];
+    var i;
+
+    for (i = 0; i < 8; i++) {
+      a[i] = Math.ceil(Math.random() * 7);
+      b[i] = Math.ceil(Math.random() * 7);
+    }
+
+    Chartlets.update(id, [a, b], { transition: "linear" });
+  }
   </script>
 
 </section>
