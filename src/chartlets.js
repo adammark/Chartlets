@@ -532,7 +532,6 @@
 
       ctx.lineWidth = 1.5;
 
-      // TODO opts.sort none|up|down
       for (i = 0; i < set.length; i++) {
         ctx.fillStyle = getColorForIndex(i);
         ctx.beginPath();
@@ -570,25 +569,20 @@
     },
 
     update: function (id, _sets, options) {
-      var elem = document.getElementById(id);
-
-      function _render() {
-        var i, a = [];
-
-        for (i = 0; i < _sets.length; i++) {
-          a.push(_sets[i].join(" "));
-        }
-
-        elem.setAttribute("data-sets", "[" + a.join("] [") + "]");
-
-        Chartlets.render([elem]);
-      }
+      var i, a = [], elem = document.getElementById(id);
 
       if (options && options.animate) {
-        return new Transition(id, parseVals(elem.getAttribute("data-sets")), _sets);
+        new Transition(id, parseVals(elem.getAttribute("data-sets")), _sets);
+        return;
       }
 
-      _render();
+      for (i = 0; i < _sets.length; i++) {
+        a.push(_sets[i].join(" "));
+      }
+
+      elem.setAttribute("data-sets", "[" + a.join("] [") + "]");
+
+      Chartlets.render([elem]);
     }
   };
 
