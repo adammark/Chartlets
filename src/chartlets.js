@@ -429,13 +429,13 @@
   }
 
   function Transition(id, asets, bsets) {
-    var i = 0, j = 0, set, interpolated = interpolateSets(asets, bsets, 10);
+    var i = 0, j = 0, set, interval, interpolated = interpolateSets(asets, bsets, 10);
 
     if (!asets.length) {
       return Chartlets.update(id, bsets);
     }
 
-    var interval = setInterval(function() {
+    interval = setInterval(function() {
       set = [];
 
       for (j = 0; j < interpolated.length; j++) {
