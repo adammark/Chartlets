@@ -49,7 +49,7 @@ function update(id) {
     b[i] = Math.ceil(Math.random() * 9);
   }
 
-  Chartlets.update(id, [a, b], { animate: true });
+  Chartlets.update(id, [a, b], { transition: "linear" });
 }
 
 </script>
