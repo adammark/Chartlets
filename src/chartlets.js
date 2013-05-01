@@ -431,10 +431,7 @@
   }
 
   function Transition(id, asets, bsets) {
-    var interpolated = interpolateSets(asets, bsets, 10);
-    var i = 0;
-    var j = 0;
-    var set;
+    var i = 0, j = 0, set, interpolated = interpolateSets(asets, bsets, 10);
 
     if (!asets.length) {
       return Chartlets.update(id, bsets);
