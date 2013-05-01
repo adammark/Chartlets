@@ -19,17 +19,23 @@ canvas {
 <canvas id="test_1" class="chartlet" data-type="line" data-sets="[1 2 3 4 5 6 7 8 9 10] [10 9 8 7 6 5 4 3 2 1]" data-colors="#f00 #00f" width="150" height="55" data-opts="cap:circle"></canvas>
 <button onclick="update('test_1')">update</button>
 
-<canvas id="test_2" class="chartlet" data-type="line" data-sets="" data-colors="#fc0 #0cf" width="150" height="55"></canvas>
+<canvas id="test_2" class="chartlet" data-type="line" data-sets="[1 2 3 4 5 6 7 8 9 10] [10 9 8 7 6 5 4 3 2 1]" data-colors="#f00 #00f" width="150" height="55" data-opts="fill:solid"></canvas>
 <button onclick="update('test_2')">update</button>
 
-<canvas id="test_3" class="chartlet" data-type="bar" data-sets="[1 2 3 4 5 6 7 8 9 10] [10 9 8 7 6 5 4 3 2 1]" data-colors="#f00 #00f" width="150" height="55"></canvas>
+<canvas id="test_3" class="chartlet" data-type="line" data-sets="[1 2 3 4 5 6 7 8 9 10] [10 9 8 7 6 5 4 3 2 1]" data-colors="#f00 #00f" width="150" height="55" data-opts="transform:stack"></canvas>
 <button onclick="update('test_3')">update</button>
 
-<canvas id="test_4" class="chartlet" data-type="bar" data-sets="[1 2 3 4 5 6 7 8 9 10] [10 9 8 7 6 5 4 3 2 1]" data-colors="#f00 #00f" width="150" height="55" data-opts="transform:stack"></canvas>
+<canvas id="test_4" class="chartlet" data-type="line" data-sets="" data-colors="#fc0 #0cf" width="150" height="55"></canvas>
 <button onclick="update('test_4')">update</button>
 
-<canvas id="test_5" class="chartlet" data-type="pie" data-sets="[1 2 3 4 5 6 7 8 9 10] [10 9 8 7 6 5 4 3 2 1]" data-colors="#f00 #00f #fc0 #cf0 #3aa #900 #090 #ccc #ddd #666" width="75" height="75"></canvas>
+<canvas id="test_5" class="chartlet" data-type="bar" data-sets="[1 2 3 4 5 6 7 8 9 10] [10 9 8 7 6 5 4 3 2 1]" data-colors="#f00 #00f" width="150" height="55"></canvas>
 <button onclick="update('test_5')">update</button>
+
+<canvas id="test_6" class="chartlet" data-type="bar" data-sets="[1 2 3 4 5 6 7 8 9 10] [10 9 8 7 6 5 4 3 2 1]" data-colors="#f00 #00f" width="150" height="55" data-opts="transform:stack"></canvas>
+<button onclick="update('test_6')">update</button>
+
+<canvas id="test_7" class="chartlet" data-type="pie" data-sets="[1 2 3 4 5 6 7 8 9 10] [10 9 8 7 6 5 4 3 2 1]" data-colors="#9351a4 #ff99cc #e31a1c #66cdaa #ffcc33 #f92830 #2fb4b1 #ffa839 #3375cd #5fd1d5" width="75" height="75"></canvas>
+<button onclick="update('test_7')">update</button>
 
 <script>
 Chartlets.render();
@@ -38,11 +44,6 @@ var a = [2, 3, 5, 3, 6, 3, 7, 8, 4, 2];
 var b = [8, 3, 4, 7, 2, 7, 2, 4, 6, 1];
 
 function update(id) {
-  // a.push(Math.ceil(Math.random() * 9));
-  // b.push(Math.ceil(Math.random() * 9));
-  // a.shift();
-  // b.shift();
-
   for (var i = 0; i < 10; i++) {
     a[i] = Math.ceil(Math.random() * 9);
     b[i] = Math.ceil(Math.random() * 9);
