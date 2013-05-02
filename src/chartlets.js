@@ -124,13 +124,13 @@
     return computeRange(mergeSets(sets).concat(sets));
   }
 
-  // Convert a color string (hex, RGB/A, or HSL/A) to an object with r, g, b, a values
+  // Convert a color string (hex, rgb/a, or hsl/a) to an object with r, g, b, a values
   function parseColor(str) {
     var color = {
-      r: 0,
-      g: 0,
-      b: 0,
-      a: 1
+      "r": 0,
+      "g": 0,
+      "b": 0,
+      "a": 1
     };
  
     if (str.match(/#/)) {
@@ -151,10 +151,10 @@
     var c = str.match(/[\d\.]+/g);
 
     return {
-      r: +c[0],
-      g: +c[1],
-      b: +c[2],
-      a: +c[3] || 1
+      "r": +c[0],
+      "g": +c[1],
+      "b": +c[2],
+      "a": +c[3] || 1
     };
   }
 
@@ -169,10 +169,10 @@
     n = +("0x" + c.join(""));
 
     return {
-      r: (n & 0xFF0000) >> 16,
-      g: (n & 0x00FF00) >> 8,
-      b: (n & 0x0000FF),
-      a: 1
+      "r": (n & 0xFF0000) >> 16,
+      "g": (n & 0x00FF00) >> 8,
+      "b": (n & 0x0000FF),
+      "a": 1
     };
   }
 
@@ -404,7 +404,7 @@
     }
   }
 
-  // Draw a rectangle
+  // Draw a rectangle from bottom left corner
   function drawRect(x, y, w, h, fillStyle) {
     ctx.fillStyle = fillStyle;
     ctx.fillRect(x, y - h, w, h);
@@ -639,7 +639,7 @@
       return themes[name];
     },
 
-    // Update data sets for an element with the given ID
+    // Update data sets for the element with the given ID
     update: function (id, sets, options) {
       var elem = document.getElementById(id);
 
