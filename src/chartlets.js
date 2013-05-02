@@ -1,10 +1,10 @@
 /*
-  Chartlets v0.9.4: http://chartlets.com
+  Chartlets v0.9.5: http://chartlets.com
   MIT License
   (c) 2013 Adam Mark
 */
 (function (win) {
-  var type, ctx, width, height, rotated, range, sets, opts, colors, themes, renderers, animate;
+  var Chartlets, type, ctx, width, height, rotated, range, sets, opts, colors, themes, renderers, animate;
 
   // Type of chart ("line", "bar" or "pie")
   type = null;
@@ -25,21 +25,28 @@
   // Data sets (an array of arrays)
   sets = [];
 
-  // Options set in data-opts
+  // Options from data-opts
   opts = {};
+
+  // Renderers for line, bar and pie charts
+  renderers = {
+    "line": renderLineChart,
+    "bar": renderBarChart,
+    "pie": renderPieChart
+  };
 
   // Built-in color themes. A theme can have any number of colors (as hex, RGB/A, or HSL/A)
   themes = {
-    "blues":    ["#7eb5d6", "#2a75a9", "#214b6b", "#dfc184", "#8f6048"],
-    "money":    ["#009b6d", "#89d168", "#d3eb87", "#666666", "#aaaaaa"],
-    "circus":   ["#9351a4", "#ff99cc", "#e31a1c", "#66cdaa", "#ffcc33"],
-    "party":    ["#ffcc00", "#ff66cc", "#3375cd", "#e43b3b", "#96cb3f"],
-    "garden":   ["#3c7bb0", "#ffa07a", "#2e8b57", "#7eb5d6", "#89d168"],
-    "crayon":   ["#468ff0", "#ff8000", "#00c000", "#ffd700", "#ff4500"],
-    "ocean":    ["#3375cd", "#62ccb2", "#4aa5d5", "#a6cee3", "#ffcc33"],
-    "spring":   ["#ed729d", "#72caed", "#9e9ac8", "#a6d854", "#f4a582"],
-    "beach":    ["#f92830", "#2fb4b1", "#ffa839", "#3375cd", "#5fd1d5"],
-    "fire":     ["#dc143c", "#ff8c00", "#ffcc33", "#b22222", "#cd8540"]
+    "blues":  ["#7eb5d6", "#2a75a9", "#214b6b", "#dfc184", "#8f6048"],
+    "money":  ["#009b6d", "#89d168", "#d3eb87", "#666666", "#aaaaaa"],
+    "circus": ["#9351a4", "#ff99cc", "#e31a1c", "#66cdaa", "#ffcc33"],
+    "party":  ["#ffcc00", "#ff66cc", "#3375cd", "#e43b3b", "#96cb3f"],
+    "garden": ["#3c7bb0", "#ffa07a", "#2e8b57", "#7eb5d6", "#89d168"],
+    "crayon": ["#468ff0", "#ff8000", "#00c000", "#ffd700", "#ff4500"],
+    "ocean":  ["#3375cd", "#62ccb2", "#4aa5d5", "#a6cee3", "#ffcc33"],
+    "spring": ["#ed729d", "#72caed", "#9e9ac8", "#a6d854", "#f4a582"],
+    "beach":  ["#f92830", "#2fb4b1", "#ffa839", "#3375cd", "#5fd1d5"],
+    "fire":   ["#dc143c", "#ff8c00", "#ffcc33", "#b22222", "#cd8540"]
   };
 
   // Animation shim. See http://paulirish.com/2011/requestanimationframe-for-smart-animating/
@@ -63,14 +70,12 @@
   function parseOpts(elem) {
     var pairs, pair, opts, i;
 
-    pairs = parseAttr(elem, "data-opts");
+    pairs = parseAttr(elem, "data-opts") || [];
     opts = {};
 
-    for (i in pairs) {
-      if (pairs.hasOwnProperty(i)) {
-        pair = pairs[i].split(":");
-        opts[pair[0]] = pair[1];
-      }
+    for (i = 0; i < pairs.length; i++) {
+      pair = pairs[i].split(":");
+      opts[pair[0]] = pair[1];
     }
 
     return opts;
@@ -212,10 +217,10 @@
     }
 
     return {
-      r: r * 255,
-      g: g * 255,
-      b: b * 255,
-      a: a
+      "r": r * 255,
+      "g": g * 255,
+      "b": b * 255,
+      "a": a
     };
   }
 
@@ -427,32 +432,6 @@
     }
   }
 
-  // Render or re-render the chart for the given element
-  function draw(elem) {
-    type = parseAttr(elem, "data-type")[0];
-    opts = parseOpts(elem);
-    ctx = elem.getContext("2d");
-    width = elem.width;
-    height = elem.height;
-    colors = themes[opts.theme] || parseAttr(elem, "data-colors") || themes.basic;
-    sets = parseVals(elem.getAttribute("data-sets"));
-    range = parseAttr(elem, "data-range") || getRange(sets, isStacked());
-    rotated = false;
-
-    // erase
-    elem.width = elem.width;
-
-    // set background color
-    drawRect(0, 0, width, -height, opts.bgcolor || "white");
-
-    try {
-      renderers[type].call();
-    }
-    catch (e) {
-      console.error(e.message);
-    }
-  }
-
   // Interpolate a value between a and b. e.g. interpolate(0,1,5,10) -> 0.5
   function interpolate(a, b, idx, steps) {
     return +a + ((+b - +a) * (idx / steps));
@@ -511,107 +490,132 @@
     animate(_render);
   }
 
-  // Renderers for line, bar and pie charts
-  renderers = {
-    line: function () {
-      var i, set, strokeStyle, fillStyle, alphaMultiplier, offset;
+  // Render a line chart
+  function renderLineChart() {
+    var i, set, strokeStyle, fillStyle, alphaMultiplier, offset;
 
-      drawAxis();
+    drawAxis();
 
-      for (i = 0; i < sets.length; i++) {
-        set = sets[i];
-        strokeStyle = getColorForIndex(i);
+    for (i = 0; i < sets.length; i++) {
+      set = sets[i];
+      strokeStyle = getColorForIndex(i);
 
-        if (isStacked()) {
-          set = mergeSets(sets.slice(0, i + 1));
-          offset = i > 0 ? mergeSets(sets.slice(0, i)) : null;
-        }
-
-        drawLineForSet(set, strokeStyle, opts.stroke || 1.5, null);
-
-        // TODO account for negative and positive values in same stack
-        if (isStacked() || isFilled()) {
-          alphaMultiplier = opts.alpha || (isStacked() ? 1 : 0.5);
-
-          fillStyle = toRGBString(sheerColor(parseColor(strokeStyle), alphaMultiplier));
-
-          drawLineForSet(set, strokeStyle, 0, fillStyle, offset);
-        }
-
-        if (opts.cap) {
-          drawCapsForSet(set, opts.cap, strokeStyle, ctx.lineWidth);
-        }
-      }
-    },
-
-    bar: function () {
-      var i, j, p, a, x, y, w, h, len;
-
-      if (opts.orient === "horiz") {
-        rotate();
+      if (isStacked()) {
+        set = mergeSets(sets.slice(0, i + 1));
+        offset = i > 0 ? mergeSets(sets.slice(0, i)) : null;
       }
 
-      drawAxis();
+      drawLineForSet(set, strokeStyle, opts.stroke || 1.5, null);
 
-      ctx.lineWidth = opts.stroke || 1;
-      ctx.lineJoin = "miter";
+      // TODO account for negative and positive values in same stack
+      if (isStacked() || isFilled()) {
+        alphaMultiplier = opts.alpha || (isStacked() ? 1 : 0.5);
 
-      len = sets[0].length;
+        fillStyle = toRGBString(sheerColor(parseColor(strokeStyle), alphaMultiplier));
 
-      // TODO fix right pad
-      for (i = 0; i < sets.length; i++) {
-        for (j = 0; j < len; j++) {
-          p = 1;
-          a = rotated ? height : width;
-          w = ((a / len) / sets.length) - ((p / sets.length) * i) - 1;
-          x = (p / 2) + getXForIndex(j, len + 1) + (w * i) + 1;
-          y = getYForValue(sets[i][j]);
-          h = y - getYForValue(0) || 1;
-
-          if (isStacked()) {
-            // TODO account for negative and positive values in same stack
-            w = (a / len) - 2;
-            x = getXForIndex(j, len + 1);
-            y = getYForValue(sumY(sets.slice(0, i + 1), j));
-          }
-
-          drawRect(x, y, w, h, getColorForIndex(i));
-        }
+        drawLineForSet(set, strokeStyle, 0, fillStyle, offset);
       }
-    },
 
-    pie: function () {
-      var i, x, y, r, a1, a2, set, sum;
-
-      i = 0;
-      x = width / 2;
-      y = height / 2;
-      r = Math.min(x, y) - 2;
-      a1 = 1.5 * Math.PI;
-      a2 = 0;
-      set = sets[0];
-      sum = sumSet(set);
-
-      ctx.lineWidth = 1.5;
-
-      for (i = 0; i < set.length; i++) {
-        ctx.fillStyle = getColorForIndex(i);
-        ctx.beginPath();
-        a2 = a1 + (set[i] / sum) * (2 * Math.PI);
-
-        // TODO opts.wedge
-        ctx.arc(x, y, r, a1, a2, false);
-        ctx.lineTo(x, y);
-        ctx.fill();
-        a1 = a2;
+      if (opts.cap) {
+        drawCapsForSet(set, opts.cap, strokeStyle, ctx.lineWidth);
       }
     }
+  }
 
-  };
+  // Render a bar chart
+  function renderBarChart() {
+    var i, j, p, a, x, y, w, h, len;
+
+    if (opts.orient === "horiz") {
+      rotate();
+    }
+
+    drawAxis();
+
+    ctx.lineWidth = opts.stroke || 1;
+    ctx.lineJoin = "miter";
+
+    len = sets[0].length;
+
+    // TODO fix right pad
+    for (i = 0; i < sets.length; i++) {
+      for (j = 0; j < len; j++) {
+        p = 1;
+        a = rotated ? height : width;
+        w = ((a / len) / sets.length) - ((p / sets.length) * i) - 1;
+        x = (p / 2) + getXForIndex(j, len + 1) + (w * i) + 1;
+        y = getYForValue(sets[i][j]);
+        h = y - getYForValue(0) || 1;
+
+        if (isStacked()) {
+          // TODO account for negative and positive values in same stack
+          w = (a / len) - 2;
+          x = getXForIndex(j, len + 1);
+          y = getYForValue(sumY(sets.slice(0, i + 1), j));
+        }
+
+        drawRect(x, y, w, h, getColorForIndex(i));
+      }
+    }
+  }
+
+  // Render a pie chart
+  function renderPieChart() {
+    var i, x, y, r, a1, a2, set, sum;
+
+    i = 0;
+    x = width / 2;
+    y = height / 2;
+    r = Math.min(x, y) - 2;
+    a1 = 1.5 * Math.PI;
+    a2 = 0;
+    set = sets[0];
+    sum = sumSet(set);
+
+    ctx.lineWidth = 1.5;
+
+    for (i = 0; i < set.length; i++) {
+      ctx.fillStyle = getColorForIndex(i);
+      ctx.beginPath();
+      a2 = a1 + (set[i] / sum) * (2 * Math.PI);
+
+      // TODO opts.wedge
+      ctx.arc(x, y, r, a1, a2, false);
+      ctx.lineTo(x, y);
+      ctx.fill();
+      a1 = a2;
+    }
+  }
+
+  // Render or re-render the chart for the given element
+  function init(elem) {
+    type = parseAttr(elem, "data-type")[0];
+    sets = parseVals(elem.getAttribute("data-sets"));
+    opts = parseOpts(elem);
+    ctx = elem.getContext("2d");
+    width = elem.width;
+    height = elem.height;
+    colors = themes[opts.theme] || parseAttr(elem, "data-colors") || themes.basic;
+    range = parseAttr(elem, "data-range") || getRange(sets, isStacked());
+    rotated = false;
+
+    // erase
+    elem.width = elem.width;
+
+    // set background color
+    drawRect(0, 0, width, -height, opts.bgcolor || "#fff");
+
+    try {
+      renderers[type]();
+    }
+    catch (e) {
+      console.error(e.message);
+    }
+  }
 
   // The API
-  win.Chartlets = {
-    // Render charts for the given elements, or render all elements with class "chartlet"
+  Chartlets = {
+    // Render charts for an array of elements, or render all elements with class "chartlet"
     render: function (elems) {
       var i;
 
@@ -620,7 +624,7 @@
       }
 
       for (i = 0; i < elems.length; i++) {
-        draw(elems[i]);
+        init(elems[i]);
       }
     },
 
@@ -634,23 +638,25 @@
       return themes[name];
     },
 
-    // Update data sets for a <canvas> element with the given ID
-    update: function (id, _sets, options) {
+    // Update data sets for an element with the given ID
+    update: function (id, sets, options) {
       var i, a = [], elem = document.getElementById(id);
 
       if (options && options.transition) {
-        new Transition(id, parseVals(elem.getAttribute("data-sets")), _sets);
+        new Transition(id, parseVals(elem.getAttribute("data-sets")), sets);
         return;
       }
 
-      for (i = 0; i < _sets.length; i++) {
-        a.push(_sets[i].join(" "));
+      for (i = 0; i < sets.length; i++) {
+        a.push(sets[i].join(" "));
       }
 
       elem.setAttribute("data-sets", "[" + a.join("] [") + "]");
 
-      Chartlets.render([elem]);
+      this.render([elem]);
     }
   };
+
+  win.Chartlets = Chartlets;
 
 }(window));
