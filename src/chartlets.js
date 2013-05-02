@@ -1,5 +1,5 @@
 /*
-  Chartlets v0.9.3: http://chartlets.com
+  Chartlets v0.9.4: http://chartlets.com
   MIT License
   (c) 2013 Adam Mark
 */
@@ -439,14 +439,14 @@
   }
 
   function Transition(id, asets, bsets) {
-    var i = 0, j = 0, set, interpolated = interpolateSets(asets, bsets, 15);
+    var i = 1, j = 0, n = 8, interpolated = interpolateSets(asets, bsets, n);
 
     if (!asets.length) {
       return Chartlets.update(id, bsets);
     }
 
     function _render() {
-      set = [];
+      var set = [];
 
       for (j = 0; j < interpolated.length; j++) {
         set.push(interpolated[j][i]);
@@ -454,7 +454,7 @@
 
       Chartlets.update(id, set);
 
-      if (++i < set[0].length) {
+      if (++i <= n) {
         animate(_render);
       }
     }
