@@ -1,7 +1,7 @@
 # Chartlets - Tiny charts for tablet and mobile web apps
 
 Chartlets are tiny charts without grids or legends, like [Sparklines][1]. They're 
-good at conveying simple relationships or trends, especially when space is scarce.
+perfect for conveying simple relationships or trends, especially when space is scarce.
 
 See examples and documentation at [chartlets.com][2].
 
