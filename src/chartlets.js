@@ -6,15 +6,29 @@
 (function (win) {
   var type, ctx, width, height, rotated, range, sets, opts, colors, themes, renderers, animate;
 
+  // Type of chart ("line", "bar" or "pie")
   type = null;
+
+  // Canvas 2d context
   ctx = null;
+
+  // Canvas dimensions
   width = 0;
   height = 0;
+
+  // Is the canvas rotated 90 degrees (for horizontal bar charts)?
   rotated = false;
+
+  // Input range [min, max] across sets
   range = [0, 0];
+
+  // Data sets (an array of arrays)
   sets = [];
+
+  // Options set in data-opts
   opts = {};
 
+  // Built-in color themes. A theme can have any number of colors (as hex, RGB/A, or HSL/A)
   themes = {
     "blues":    ["#7eb5d6", "#2a75a9", "#214b6b", "#dfc184", "#8f6048"],
     "money":    ["#009b6d", "#89d168", "#d3eb87", "#666666", "#aaaaaa"],
@@ -28,6 +42,7 @@
     "fire":     ["#dc143c", "#ff8c00", "#ffcc33", "#b22222", "#cd8540"]
   };
 
+  // Animation shim. See http://paulirish.com/2011/requestanimationframe-for-smart-animating/
   animate =
     win.requestAnimationFrame || 
     win.webkitRequestAnimationFrame ||
@@ -37,12 +52,14 @@
       win.setTimeout(callback, 1000 / 60);
     };
 
+  // Get attribute values (in the form attr="a b c") as an array ["a", "b", "c"]
   function parseAttr(elem, attr) {
     var val = elem.getAttribute(attr);
 
     return val ? val.replace(/, +/g, ",").split(/ +/g) : null;
   }
 
+  // Get option values (in the form data-opts="a:b c:d" as an object {a:"b", c:"d"}
   function parseOpts(elem) {
     var pairs, pair, opts, i;
 
@@ -59,6 +76,7 @@
     return opts;
   }
 
+  // Get data values (in the form data-sets="[1 2 3] [4 5 6]") as an array of arrays
   function parseVals(vals) {
     var sets = vals.match(/\[[^\[]+\]/g) || [], i;
 
@@ -69,18 +87,22 @@
     return sets;
   }
 
+  // Is the bar or line chart stacked?
   function isStacked() {
     return opts.transform === "stack";
   }
 
+  // Is the line chart filled?
   function isFilled() {
     return opts.fill !== undefined;
   }
 
+  // Get the range [min, max] across all data sets
   function getRange(sets, stacked) {
     return stacked ? computeStackRange(sets) : computeRange(sets);
   }
 
+  // Compute the range [min, max] across all data sets
   function computeRange(sets) {
     var arr = Array.prototype.concat.apply([], sets);
 
@@ -91,10 +113,12 @@
     return [Math.min.apply(null, arr), Math.max.apply(null, arr)];
   }
 
+  // Compute the range [min, max] across all data sets if they are *stacked*
   function computeStackRange(sets) {
     return computeRange(mergeSets(sets).concat(sets));
   }
 
+  // Convert a color string (hex, RGB/A, or HSL/A) to an object with r, g, b, a values
   function parseColor(str) {
     var color = {
       r: 0,
@@ -116,6 +140,7 @@
     return color;
   }
 
+  // Convert an rgb or rgba string to an object with r, g, b, a values
   function parseRGB(str) {
     var c = str.match(/[\d\.]+/g);
 
@@ -127,9 +152,9 @@
     };
   }
 
+  // Convert a 3- or 6-digit hex string to an object with r, g, b, a values
   function parseHex(str) {
-    var c = str.match(/\w/g),
-        n;
+    var c = str.match(/\w/g), n;
 
     if (c.length === 3) {
       c = [c[0], c[0], c[1], c[1], c[2], c[2]];
@@ -145,7 +170,8 @@
     };
   }
 
-  // http://stackoverflow.com/questions/2353211/hsl-to-rgb-color-conversion
+  // Convert an hsl or hsla string to an object with r, g, b, a values
+  // See http://stackoverflow.com/questions/2353211/hsl-to-rgb-color-conversion
   function parseHSL(str) {
     var c, h, s, l, r, g, b, q, p, a;
 
@@ -193,12 +219,14 @@
     };
   }
 
-  function sheerColor(color, alpha) {
-    color.a *= alpha;
+  // Multiply a color's alpha value (0 to 1) by n
+  function sheerColor(color, n) {
+    color.a *= n;
 
     return color;
   }
 
+  // Convert a color object (with r, g, b, a properties) to an rgba string
   function toRGBString(color) {
     return "rgba(" + [
       Math.round(color.r),
@@ -208,26 +236,31 @@
     ].join(",") + ")";
   }
 
+  // Rotate the context 90 degrees
   function rotate() {
     rotated = true;
     ctx.translate(width, 0);
     ctx.rotate(Math.PI / 2);    
   }
 
+  // Get the x step in pixels
   function getXStep(len) {
     return (rotated ? height : width) / (len - 1);
   }
 
+  // Get the x position in pixels for the given index and length of set
   function getXForIndex(idx, len) {
     return idx * getXStep(len);
   }
 
+  // Get the y position in pixels for the given data value
   function getYForValue(val) {
-    var n = rotated ? width : height;
+    var h = rotated ? width : height;
 
-    return n - (n * ((val - range[0]) / (range[1] - range[0])));
+    return h - (h * ((val - range[0]) / (range[1] - range[0])));
   }
 
+  // Sum all the values in a set. e.g. sumSet([1,2,3]) -> 6
   function sumSet(set) {
     var i, n = 0;
 
@@ -238,6 +271,7 @@
     return n;
   }
 
+  // Sum all the values at the given index across sets. e.g. sumY([[4,5],[6,7]], 0) -> 10
   function sumY(sets, idx) {
     var i, n = 0;
 
@@ -248,6 +282,7 @@
     return n;
   }
 
+  // Merge two or more sets into one array. e.g. mergeSets([[1,2],[3,4]]) -> [4,6]
   function mergeSets(sets) {
     var i, set = [];
 
@@ -258,10 +293,12 @@
     return set;
   }
 
+  // Get the color string for the given index. Return black if undefined
   function getColorForIndex(idx) {
     return colors[idx] || "#000";
   }
 
+  // Draw a line (or polygon) for a data set
   function drawLineForSet(set, strokeStyle, lineWidth, fillStyle, offset) {
     var i = 0, x, y, step;
     
@@ -286,7 +323,6 @@
     }
 
     // TODO support transform=band (upper + lower baselines)
-
     if (fillStyle) {
       ctx.fillStyle = fillStyle;
       if (offset) {
@@ -309,23 +345,28 @@
     }
   }
 
+  // Draw an individual line segment
   function drawLineSegment(set, i, x, y, step, shape) {
     var cx, cy;
 
+    // curvy line
     if (shape === "smooth") {
       cx = getXForIndex(i - 0.5, set.length);
       cy = getYForValue(set[i - 1]);
       ctx.bezierCurveTo(cx, cy, cx, y, x, y);
     }
     else {
+      // stepped line
       if (shape === "step") {
         ctx.lineTo(x - (step / 2), getYForValue(set[i - 1]));
         ctx.lineTo(x - (step / 2), y);
       }
+      // else straight line
       ctx.lineTo(x, y);
     }
   }
 
+  // Draw circle or square caps for a data set
   function drawCapsForSet(set, capStyle, fillStyle, lineWidth) {
     var i = -1, x, y, w;
 
@@ -344,6 +385,7 @@
     }
   }
 
+  // Draw a circle
   function drawCircle(fillStyle, strokeStyle, x, y, r) {
     ctx.fillStyle = fillStyle;
     ctx.strokeStyle = strokeStyle;
@@ -356,11 +398,13 @@
     }
   }
 
+  // Draw a rectangle
   function drawRect(x, y, w, h, fillStyle) {
     ctx.fillStyle = fillStyle;
     ctx.fillRect(x, y - h, w, h);
   }
 
+  // Draw an axis if a y-value is provided in data-opts
   function drawAxis() {
     var x, y;
 
@@ -383,6 +427,7 @@
     }
   }
 
+  // Render or re-render the chart for the given element
   function draw(elem) {
     type = parseAttr(elem, "data-type")[0];
     opts = parseOpts(elem);
@@ -408,10 +453,12 @@
     }
   }
 
-  function interpolate(a, b, idx, len) {
-    return +a + ((+b - +a) * (idx / len));
+  // Interpolate a value between a and b. e.g. interpolate(0,1,5,10) -> 0.5
+  function interpolate(a, b, idx, steps) {
+    return +a + ((+b - +a) * (idx / steps));
   }
 
+  // Interpolate all values from set a to set b, returning an array of arrays
   function interpolateSet(a, b, n) {
     var i, j, c = [a];
 
@@ -428,6 +475,7 @@
     return c.concat([b]);
   }
 
+  // Interpolate all values across two arrays of sets, returning a multidimensional array
   function interpolateSets(a, b, n) {
     var i, c = [];
 
@@ -438,6 +486,7 @@
     return c;
   }
 
+  // Create a transition from one array of sets to another for the element with the given ID
   function Transition(id, asets, bsets) {
     var i = 1, j = 0, n = 8, interpolated = interpolateSets(asets, bsets, n);
 
@@ -462,6 +511,7 @@
     animate(_render);
   }
 
+  // Renderers for line, bar and pie charts
   renderers = {
     line: function () {
       var i, set, strokeStyle, fillStyle, alphaMultiplier, offset;
@@ -559,7 +609,9 @@
 
   };
 
+  // The API
   win.Chartlets = {
+    // Render charts for the given elements, or render all elements with class "chartlet"
     render: function (elems) {
       var i;
 
@@ -572,14 +624,17 @@
       }
     },
 
+    // Set a color theme. e.g. setTheme("disco", ["#123", "#456", "#789"])
     setTheme: function (name, palette) {
       themes[name] = palette;
     },
 
+    // Get a color theme as an array of strings
     getTheme: function (name) {
       return themes[name];
     },
 
+    // Update data sets for a <canvas> element with the given ID
     update: function (id, _sets, options) {
       var i, a = [], elem = document.getElementById(id);
 
