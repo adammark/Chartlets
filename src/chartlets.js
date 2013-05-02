@@ -59,14 +59,14 @@
       win.setTimeout(callback, 1000 / 60);
     };
 
-  // Get attribute values (in the form attr="a b c") as an array ["a", "b", "c"]
+  // Split attribute value into array. "a b c" -> ["a", "b", "c"]
   function parseAttr(elem, attr) {
     var val = elem.getAttribute(attr);
 
     return val ? val.replace(/, +/g, ",").split(/ +/g) : null;
   }
 
-  // Get option values (in the form data-opts="a:b c:d" as an object {a:"b", c:"d"}
+  // Parse data-opts attribute. "a:b c:d" -> {a:"b", c:"d"}
   function parseOpts(elem) {
     var pairs, pair, opts, i;
 
@@ -81,12 +81,13 @@
     return opts;
   }
 
-  // Get data values (in the form data-sets="[1 2 3] [4 5 6]") as an array of arrays
-  function parseVals(vals) {
-    var sets = vals.match(/\[[^\[]+\]/g) || [], i;
+  // Parse data-sets attribute. "[1 2] [3 4]" -> [[1,2], [3,4]]
+  function parseSets(str) {
+    // or "[[1,2], [3,4]]" -> [[1,2], [3,4]]
+    var sets = str.match(/\[[^\[]+\]/g) || [], i;
 
     for (i = 0; i < sets.length; i++) {
-      sets[i] = sets[i].match(/[-\d\.,]+/g);
+      sets[i] = sets[i].match(/[-\d\.]+/g);
     }
 
     return sets;
@@ -590,7 +591,7 @@
   // Render or re-render the chart for the given element
   function init(elem) {
     type = parseAttr(elem, "data-type")[0];
-    sets = parseVals(elem.getAttribute("data-sets"));
+    sets = parseSets(elem.getAttribute("data-sets"));
     opts = parseOpts(elem);
     ctx = elem.getContext("2d");
     width = elem.width;
@@ -640,18 +641,14 @@
 
     // Update data sets for an element with the given ID
     update: function (id, sets, options) {
-      var i, a = [], elem = document.getElementById(id);
+      var elem = document.getElementById(id);
 
       if (options && options.transition) {
-        new Transition(id, parseVals(elem.getAttribute("data-sets")), sets);
+        new Transition(id, parseSets(elem.getAttribute("data-sets")), sets);
         return;
       }
 
-      for (i = 0; i < sets.length; i++) {
-        a.push(sets[i].join(" "));
-      }
-
-      elem.setAttribute("data-sets", "[" + a.join("] [") + "]");
+      elem.setAttribute("data-sets", JSON.stringify(sets));
 
       this.render([elem]);
     }
