@@ -641,7 +641,7 @@
     update: function (id, sets, options) {
       var elem = document.getElementById(id);
 
-      if (options && options.transition) {
+      if (options && options.transition === "linear") {
         new Transition(id, parseSets(elem.getAttribute("data-sets")), sets);
         return;
       }
