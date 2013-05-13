@@ -573,8 +573,6 @@
     set = sets[0];
     sum = sumSet(set);
 
-    ctx.lineWidth = 1.5;
-
     for (i = 0; i < set.length; i++) {
       ctx.fillStyle = getColorForIndex(i);
       ctx.beginPath();
