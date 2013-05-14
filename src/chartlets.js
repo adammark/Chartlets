@@ -98,7 +98,7 @@
     return opts.transform === "stack";
   }
 
-  // TODO doc
+  // Is the line chart banded?
   function isBanded() {
     return opts.transform === "band";
   }
@@ -325,8 +325,8 @@
       x = getXForIndex(i, set.length);
       y = getYForValue(set[i]);
 
-      // TODO support stack + smooth
-      if (isStacked()) {
+      // TODO support smooth and step
+      if (isStacked() || isBanded()) {
         opts.shape = "straight";
       }
 
@@ -523,7 +523,6 @@
 
       drawLineForSet(set, strokeStyle, opts.stroke || 1.5, null);
 
-      // TODO account for negative and positive values in same stack
       if (isStacked() || isFilled() || isBanded()) {
         alphaMultiplier = opts.alpha || (isStacked() ? 1 : 0.5);
 
@@ -593,7 +592,6 @@
       ctx.beginPath();
       a2 = a1 + (set[i] / sum) * (2 * Math.PI);
 
-      // TODO opts.wedge
       ctx.arc(x, y, r, a1, a2, false);
       ctx.lineTo(x, y);
       ctx.fill();
