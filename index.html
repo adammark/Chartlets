@@ -373,22 +373,6 @@ setInterval(function() {
 }, 500);
 </pre>
 
-  <script>
-    (function () {
-      var a = [2, 3, 5, 3, 6, 3, 7, 8, 4, 2];
-      var b = [8, 3, 4, 7, 2, 7, 2, 4, 6, 1];
-
-      setInterval(function() {
-        a.push(Math.ceil(Math.random() * 9));
-        b.push(Math.ceil(Math.random() * 9));
-        a.shift();
-        b.shift();
-
-        Chartlets.update("demo1", [a, b]);
-      }, 500);
-    }());
-  </script>
-
   <br>
 
   <p>Here, a pie chart acts as a progress meter:</p>
@@ -408,22 +392,6 @@ setInterval(function() {
   <span class="highlight">Chartlets.update("demo2", [[a, 100 - a]]);</span>
 }, 50);
 </pre>
-
-  <script>
-    (function () {
-      var a = 0;
-
-      setInterval(function() {
-        a++;
-
-        if (a > 100) {
-          a = 0;
-        }
-
-        Chartlets.update("demo2", [[a, 100 - a]]);
-      }, 50);
-    }());
-  </script>
 
 </section>
 
@@ -460,21 +428,6 @@ setInterval(function() {
     <canvas id="tx_pie" class="chartlet" data-type="pie" data-sets="[1 1 1 1 1 1 1 1]" data-colors="#9351a4 #ff99cc #e31a1c #66cdaa #ffcc33 #f92830 #2fb4b1 #ffa839" width="65" height="65"></canvas>
     <button onclick="tx_demo('tx_pie')">Update</button>
   </div>
-
-  <script>
-    function tx_demo(id) {
-      var a = [];
-      var b = [];
-      var i;
-
-      for (i = 0; i < 8; i++) {
-        a[i] = Math.ceil(Math.random() * 7);
-        b[i] = Math.ceil(Math.random() * 7);
-      }
-
-      Chartlets.update(id, [a, b], { transition: "linear" });
-    }
-  </script>
 </section>
 
 <section id="notes">
@@ -494,6 +447,47 @@ setInterval(function() {
 
 <script>
   Chartlets.render();
+
+  (function () {
+    var a = [2, 3, 5, 3, 6, 3, 7, 8, 4, 2];
+    var b = [8, 3, 4, 7, 2, 7, 2, 4, 6, 1];
+
+    setInterval(function() {
+      a.push(Math.ceil(Math.random() * 9));
+      b.push(Math.ceil(Math.random() * 9));
+      a.shift();
+      b.shift();
+
+      Chartlets.update("demo1", [a, b]);
+    }, 500);
+  }());
+
+  (function () {
+    var a = 0;
+
+    setInterval(function() {
+      a++;
+
+      if (a > 100) {
+        a = 0;
+      }
+
+      Chartlets.update("demo2", [[a, 100 - a]]);
+    }, 50);
+  }());
+
+  function tx_demo(id) {
+    var a = [];
+    var b = [];
+    var i;
+
+    for (i = 0; i < 8; i++) {
+      a[i] = Math.ceil(Math.random() * 7);
+      b[i] = Math.ceil(Math.random() * 7);
+    }
+
+    Chartlets.update(id, [a, b], { transition: "linear" });
+  }
 </script>
 
 </body>
