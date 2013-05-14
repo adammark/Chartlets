@@ -355,9 +355,9 @@ li strong {
 <section id="updating">
   <h3>Updating Data</h3>
 
-  <p>The <code>update</code> method helps you re-render charts with new data or simply drop in default data after it is loaded. Below, the <code>&lt;canvas&gt;</code> element with ID <code>"demo"</code> is updated with new values every 500ms.</p>
+  <p>The <code>update</code> method helps you re-render charts with new data or simply drop in default data after it is loaded. Below, the <code>&lt;canvas&gt;</code> element with ID <code>"demo1"</code> is updated with new values every 500ms.</p>
 
-  <canvas class="chartlet" id="demo" data-type="line" data-colors="#ffcc00 #ff66cc" data-range="0 10" data-sets="[2 3 5 3 6 3 7 8 4 2] [8 3 4 7 2 7 2 4 6 1]" width="150" height="55" data-opts="stroke:2 shape:smooth"></canvas>
+  <canvas class="chartlet" id="demo1" data-type="line" data-colors="#ffcc00 #ff66cc" data-range="0 10" data-sets="[2 3 5 3 6 3 7 8 4 2] [8 3 4 7 2 7 2 4 6 1]" width="150" height="55" data-opts="stroke:2 shape:smooth"></canvas>
 
 <pre>
 var a = [2, 3, 5, 3, 6, 3, 7, 8, 4, 2];
@@ -369,7 +369,7 @@ setInterval(function() {
   a.shift();
   b.shift();
 
-  <span class="highlight">Chartlets.update("demo", [a, b]);</span>
+  <span class="highlight">Chartlets.update("demo1", [a, b]);</span>
 }, 500);
 </pre>
 
@@ -384,8 +384,44 @@ setInterval(function() {
         a.shift();
         b.shift();
 
-        Chartlets.update("demo", [a, b]);
+        Chartlets.update("demo1", [a, b]);
       }, 500);
+    }());
+  </script>
+
+  <br>
+
+  <p>Here, a pie chart acts as a progress meter:</p>
+
+  <canvas id="demo2" style="border:none" class="chartlet" data-type="pie" data-sets="[0 100]" data-colors="#0c0 #ddd" width="60" height="60"></canvas>
+
+<pre>
+var a = 0;
+
+setInterval(function() {
+  a++;
+
+  if (a > 100) {
+    a = 0;
+  }
+
+  <span class="highlight">Chartlets.update("demo2", [[a, 100 - a]]);</span>
+}, 50);
+</pre>
+
+  <script>
+    (function () {
+      var a = 0;
+
+      setInterval(function() {
+        a++;
+
+        if (a > 100) {
+          a = 0;
+        }
+
+        Chartlets.update("demo2", [[a, 100 - a]]);
+      }, 50);
     }());
   </script>
 
@@ -426,20 +462,19 @@ setInterval(function() {
   </div>
 
   <script>
-  function tx_demo(id) {
-    var a = [];
-    var b = [];
-    var i;
+    function tx_demo(id) {
+      var a = [];
+      var b = [];
+      var i;
 
-    for (i = 0; i < 8; i++) {
-      a[i] = Math.ceil(Math.random() * 7);
-      b[i] = Math.ceil(Math.random() * 7);
+      for (i = 0; i < 8; i++) {
+        a[i] = Math.ceil(Math.random() * 7);
+        b[i] = Math.ceil(Math.random() * 7);
+      }
+
+      Chartlets.update(id, [a, b], { transition: "linear" });
     }
-
-    Chartlets.update(id, [a, b], { transition: "linear" });
-  }
   </script>
-
 </section>
 
 <section id="notes">
