@@ -98,6 +98,11 @@
     return opts.transform === "stack";
   }
 
+  // TODO doc
+  function isBanded() {
+    return opts.transform === "band";
+  }
+
   // Is the line chart filled?
   function isFilled() {
     return opts.fill !== undefined;
@@ -328,23 +333,28 @@
       drawLineSegment(set, i, x, y, step, opts.shape);
     }
 
-    // TODO support transform=band (upper + lower baselines)
     if (fillStyle) {
       ctx.fillStyle = fillStyle;
+
       if (offset) {
         while (--i >= 0) {
           x = getXForIndex(i, offset.length);
           y = getYForValue(offset[i]);
 
           drawLineSegment(offset, i, x, y, step, opts.shape);
-          //ctx.lineTo(x, y);
+          // ctx.lineTo(x, y);
         }
       }
       else {
         ctx.lineTo(x, getYForValue(0));
         ctx.lineTo(0, getYForValue(0));
       }
+
       ctx.fill();
+
+      if (isBanded()) {
+        ctx.stroke();
+      }
     }
     else {
       ctx.stroke();
@@ -493,15 +503,20 @@
 
   // Render a line chart
   function renderLineChart() {
-    var i, set, strokeStyle, fillStyle, alphaMultiplier, offset;
+    var i, n, set, strokeStyle, fillStyle, alphaMultiplier, offset;
 
     drawAxis();
 
-    for (i = 0; i < sets.length; i++) {
-      set = sets[i];
-      strokeStyle = getColorForIndex(i);
+    n = isBanded() ? 2 : 1;
 
-      if (isStacked()) {
+    for (i = 0; i < sets.length; i += n) {
+      set = sets[i];
+      strokeStyle = getColorForIndex(i / n);
+
+      if (isBanded()) {
+        offset = sets[i + 1];
+      }
+      else if (isStacked()) {
         set = mergeSets(sets.slice(0, i + 1));
         offset = i > 0 ? mergeSets(sets.slice(0, i)) : null;
       }
@@ -509,7 +524,7 @@
       drawLineForSet(set, strokeStyle, opts.stroke || 1.5, null);
 
       // TODO account for negative and positive values in same stack
-      if (isStacked() || isFilled()) {
+      if (isStacked() || isFilled() || isBanded()) {
         alphaMultiplier = opts.alpha || (isStacked() ? 1 : 0.5);
 
         fillStyle = toRGBString(sheerColor(parseColor(strokeStyle), alphaMultiplier));
