@@ -538,19 +538,20 @@
 
     len = sets[0].length;
 
+    // TODO fix right pad
     for (i = 0; i < sets.length; i++) {
       for (j = 0; j < len; j++) {
         p = 1;
         a = rotated ? height : width;
-        w = ((a / len) / sets.length) - p;
-        x = getXForIndex(j, len + 1) + (w * i) + p;
+        w = ((a / len) / sets.length) - ((p / sets.length) * i) - 1;
+        x = (p / 2) + getXForIndex(j, len + 1) + (w * i) + 1;
         y = getYForValue(sets[i][j]);
         h = y - getYForValue(0) || 1;
 
         if (isStacked()) {
           // TODO account for negative and positive values in same stack
-          w = (a / len) - p;
-          x = getXForIndex(j, len + 1) + p;
+          w = (a / len) - 2;
+          x = getXForIndex(j, len + 1);
           y = getYForValue(sumY(sets.slice(0, i + 1), j));
         }
 
