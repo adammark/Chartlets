@@ -589,10 +589,13 @@
   // Render or re-render the chart for the given element
   function init(elem) {
     if (win.devicePixelRatio > 1) {
-      elem.style.width = elem.width + "px";
-      elem.style.height = elem.height + "px";
-      elem.width = 2 * elem.width;
-      elem.height = 2 * elem.height;
+      if (!elem.__resized) {
+        elem.style.width = elem.width + "px";
+        elem.style.height = elem.height + "px";
+        elem.width = 2 * elem.width;
+        elem.height = 2 * elem.height;
+        elem.__resized = true;
+      }
     }
 
     type = parseAttr(elem, "data-type")[0];
