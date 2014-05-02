@@ -1,5 +1,5 @@
 /*
-  Chartlets v0.9.7: http://chartlets.com
+  Chartlets v0.9.8: http://chartlets.com
   MIT License
   (c) 2013 Adam Mark
 */
@@ -588,6 +588,13 @@
 
   // Render or re-render the chart for the given element
   function init(elem) {
+    if (win.devicePixelRatio > 1) {
+      elem.style.width = elem.width + "px";
+      elem.style.height = elem.height + "px";
+      elem.width = 2 * elem.width;
+      elem.height = 2 * elem.height;
+    }
+
     type = parseAttr(elem, "data-type")[0];
     sets = parseSets(elem.getAttribute("data-sets"));
     opts = parseOpts(elem);
