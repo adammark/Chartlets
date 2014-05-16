@@ -629,7 +629,7 @@
       var i;
 
       if (!elems) {
-        elems = [].slice.call(document.getElementsByClassName("chartlet"));
+        elems = document.querySelectorAll(".chartlet");
       }
 
       for (i = 0; i < elems.length; i++) {
