@@ -8,7 +8,7 @@
 
 <style>
 canvas {
-    border: 1px solid #ddd;
+  border: 1px solid #ddd;
 }
 </style>
 
@@ -17,26 +17,46 @@ canvas {
 <body>
 
 <canvas id="test_1" class="chartlet" data-type="line" data-sets="[1 2 3 4 5 6 7 8 9 10] [10 9 8 7 6 5 4 3 2 1]" data-colors="#f00 #00f" width="150" height="55" data-opts="cap:circle"></canvas>
-<button onclick="update('test_1')">update</button>
 
 <canvas id="test_2" class="chartlet" data-type="line" data-sets="[1 2 3 4 5 6 7 8 9 10] [10 9 8 7 6 5 4 3 2 1]" data-colors="#f00 #00f" width="150" height="55" data-opts="fill:solid"></canvas>
-<button onclick="update('test_2')">update</button>
 
 <canvas id="test_3" class="chartlet" data-type="line" data-sets="[1 2 3 4 5 6 7 8 9 10] [10 9 8 7 6 5 4 3 2 1]" data-colors="#f00 #00f" width="150" height="55" data-opts="transform:stack"></canvas>
-<button onclick="update('test_3')">update</button>
 
 <canvas id="test_4" class="chartlet" data-type="line" data-sets="" data-colors="#fc0 #0cf" width="150" height="55"></canvas>
-<button onclick="update('test_4')">update</button>
 
 <canvas id="test_5" class="chartlet" data-type="bar" data-sets="[1 2 3 4 5 6 7 8 9 10] [10 9 8 7 6 5 4 3 2 1]" data-colors="#f00 #00f" width="150" height="55"></canvas>
-<button onclick="update('test_5')">update</button>
 
 <canvas id="test_6" class="chartlet" data-type="bar" data-sets="[1 2 3 4 5 6 7 8 9 10] [10 9 8 7 6 5 4 3 2 1]" data-colors="#f00 #00f" width="150" height="55" data-opts="transform:stack"></canvas>
-<button onclick="update('test_6')">update</button>
 
-<canvas id="test_7" class="chartlet" data-type="pie" data-sets="[1 2 3 4 5 6 7 8 9 10] [10 9 8 7 6 5 4 3 2 1]" data-colors="#9351a4 #ff99cc #e31a1c #66cdaa #ffcc33 #f92830 #2fb4b1 #ffa839 #3375cd #5fd1d5" width="75" height="75"></canvas>
-<button onclick="update('test_7')">update</button>
+<canvas id="test_7" class="chartlet" data-type="pie" data-sets="[1 2 3 4 5 6 7 8 9 10]" data-colors="#9351a4 #ff99cc #e31a1c #66cdaa #ffcc33 #f92830 #2fb4b1 #ffa839 #3375cd #5fd1d5" width="75" height="75"></canvas>
 
+<canvas class="chartlet" data-type="brick" data-sets="[100 200 300]" data-colors="#e00 #0c0 #ddd" width="100" height="100"></canvas>
+
+<canvas class="chartlet" data-type="brick" data-sets="[1000 1000 1000]" data-colors="#e00 #0c0 #ddd" data-opts="shape:circle" width="100" height="100"></canvas>
+
+<canvas class="chartlet" data-type="brick" data-sets="[20 10 5]" data-colors="#e00 #0c0 #ddd" width="100" height="100"></canvas>
+
+<canvas class="chartlet" data-type="brick" data-sets="[10 20 30]" data-colors="#e00 #0c0 #ddd" width="75" height="75"></canvas>
+
+<canvas class="chartlet" data-type="brick" data-sets="[1 2 3]" data-colors="#e00 #0c0 #ddd" width="75" height="75"></canvas>
+
+<canvas class="chartlet" data-type="brick" data-sets="[1 2 3]" data-colors="#e00 #0c0 #ddd" width="75" height="35"></canvas>
+
+<canvas class="chartlet" data-type="brick" data-sets="[1 2 3]" data-colors="#e00 #0c0 #ddd" data-opts="shape:circle" width="75" height="35"></canvas>
+
+<canvas class="chartlet" data-type="brick" data-sets="[1 2 3]" data-colors="#e00 #0c0 #ddd" width="35" height="75"></canvas>
+
+<canvas class="chartlet" data-type="brick" data-sets="[10 20 30]" data-colors="#e00 #0c0 #ddd" width="35" height="75"></canvas>
+
+<canvas class="chartlet" data-type="brick" data-sets="[1 2 3]" data-colors="#e00 #0c0 #ddd" data-opts="shape:circle" width="35" height="75"></canvas>
+
+<canvas class="chartlet" data-type="brick" data-sets="[10 20 30]" data-colors="#e00 #0c0 #ddd" data-opts="shape:circle" width="35" height="75"></canvas>
+
+<canvas class="chartlet" data-type="brick" data-sets="[100 200 300]" data-colors="#e00 #0c0 #ddd" data-opts="shape:circle" width="35" height="75"></canvas>
+
+<canvas class="chartlet" data-type="brick" data-sets="[100 200 300]" data-colors="#e00 #0c0 #ddd" data-opts="shape:circle" width="75" height="35"></canvas>
+
+<canvas class="chartlet" data-type="brick" data-sets="[1000 2000 3000]" data-colors="#e00 #0c0 #ddd" data-opts="shape:circle" width="35" height="75"></canvas>
 <br>
 <br>
 <br>
@@ -59,7 +79,7 @@ function update(id) {
 }
 
 function updateAll() {
-  var elems = document.getElementsByClassName("chartlet");
+  var elems = document.querySelectorAll("[id*='test_']");
 
   for (var i = 0; i < elems.length; i++) {
   	update(elems[i].id);

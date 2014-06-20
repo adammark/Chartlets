@@ -32,7 +32,8 @@
   renderers = {
     "line": renderLineChart,
     "bar": renderBarChart,
-    "pie": renderPieChart
+    "pie": renderPieChart,
+    "brick": renderBrickChart
   };
 
   // Built-in color themes. A theme can have any number of colors (as hex, RGB/A, or HSL/A)
@@ -382,7 +383,7 @@
 
       if (capStyle === "square") {
         w = Math.max(2, lineWidth) * 2.5;
-        drawRect(x - (w / 2), y + (w / 2), w, w, fillStyle);
+        drawRect(fillStyle, x - (w / 2), y + (w / 2), w, w);
       }
       else {
         w = lineWidth + 1;
@@ -405,7 +406,7 @@
   }
 
   // Draw a rectangle from bottom left corner
-  function drawRect(x, y, w, h, fillStyle) {
+  function drawRect(fillStyle, x, y, w, h) {
     ctx.fillStyle = fillStyle;
     ctx.fillRect(x, y - h, w, h);
   }
@@ -555,7 +556,7 @@
           y = getYForValue(sumY(sets.slice(0, i + 1), j));
         }
 
-        drawRect(x, y, w, h, getColorForIndex(i));
+        drawRect(getColorForIndex(i), x, y, w, h);
       }
     }
   }
@@ -564,7 +565,6 @@
   function renderPieChart() {
     var i, x, y, r, a1, a2, set, sum;
 
-    i = 0;
     x = width / 2;
     y = height / 2;
     r = Math.min(x, y) - 2;
@@ -584,6 +584,50 @@
       ctx.fill();
       a1 = a2;
     }
+  }
+
+  function renderBrickChart() {
+    var i;
+    var set = sets[0];
+    var sum = sumSet(set);
+    var m = Math.min((width * height) / 100, sum); // number of dots
+    var z = opts.basis ? Math.max(opts.basis, m) : m;
+    var c = 0;
+    var t = [set[0] / sum];
+    var n = Math.ceil(width / Math.sqrt((width * height) / z)); // dots per row
+    var o = Math.ceil(z / n); // dots per col
+    var p = 2; // padding between dots
+    var w = Math.min((width - (p * (n-1))) / n, (height - (p * (o-1))) / o);
+    var x1 = opts.shape === "circle" ? w / 2 : 0; // x origin
+    var y1 = x1; // y origin
+    var x = x1; // current x
+    var y = y1; // current y
+
+    for (i = 1; i < set.length; i++) {
+      t.push(t[i - 1] + (set[i] / sum));
+    }
+
+    // left to right, top to bottom
+    for (i = 0; i < m; i++) {
+      if (i && i % n == 0) {
+        x = x1;
+        y += w + p;
+      }
+
+      if (i / m >= t[c]) {
+        c++;
+      }
+
+      if (opts.shape === "circle") {
+        drawCircle(getColorForIndex(c), null, x, y, w / 2);
+      }
+      else {
+        drawRect(getColorForIndex(c), x, y, w, -w);
+      }
+
+      x += w + p;
+    }
+
   }
 
   // Render or re-render the chart for the given element
@@ -612,7 +656,9 @@
     elem.width = elem.width;
 
     // set background color
-    drawRect(0, 0, width, -height, opts.bgcolor || "#fff");
+    if (opts.bgcolor) {
+      drawRect(opts.bgcolor || "#fff", 0, 0, width, -height);
+    }
 
     try {
       renderers[type]();
