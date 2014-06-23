@@ -10,7 +10,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black" />
 
-<link href="http://fonts.googleapis.com/css?family=Just+Me+Again+Down+Here" rel="stylesheet" type="text/css">
+<!-- <link href='http://fonts.googleapis.com/css?family=Varela+Round' rel='stylesheet' type='text/css'> -->
 
 <script src="chartlets.min.js"></script>
 <style>
@@ -25,31 +25,31 @@ body {
   padding: 20px 50px;
 }
 header {
-  margin-bottom: 25px;
+  margin-bottom: 50px;
 }
 footer {
-  font-size: 80%;
+  font-size: .8em;
   color: #999;
 }
-h1, h2, h3, #download {
+h1, h2, h3 {
+  /*font-family: 'Varela Round', Helvetica, Arial;*/
   font-weight: normal;
-  font-family: "Just Me Again Down Here", Helvetica, Arial;
 }
 h1, h2, h3 {
   color: #222;
-  margin: 0 0 2px 0;
+  margin: 0;
   padding: 0;
 }
 h1 {
-  font-size: 80px;
-  margin: -25px 0 -15px 2px;
+  font-size: 3.75em;
+  /*margin: -25px 0 -35px 2px;*/
 }
 h2 {
-  font-size: 35px;
-  line-height: 35px;
+  font-size: 1.7em;
 }
 h3 {
-  font-size: 30px;
+  font-size: 1.5em;
+  margin-bottom: .25em;
   color: hsl(336, 76%, 50%);
 }
 p {
@@ -62,15 +62,16 @@ a:hover {
   color: hsl(336, 76%, 50%);
 }
 small {
-  font-size: 65%;
+  font-size: .75em;
   color: #999;
 }
 section {
   margin-bottom: 50px;
 }
 #download {
-  float: right;
-  font-size: 35px;
+  text-align: right;
+  font-size: 1.35em;
+  font-weight: bold;
   color: #222;
 }
 table.examples tr td {
@@ -92,7 +93,7 @@ td, th {
 .swatch p {
   margin: 4px 0;
   color: #999;
-  font-size: 90%;
+  font-size: .9em;
 }
 .tx {
   margin: 10px 10px 10px 0;
@@ -103,7 +104,7 @@ td, th {
 }
 code, pre {
   font-family: Monaco, Courier, monospace;
-  font-size: 80%;
+  font-size: .8em;
 }
 li strong {
   color: hsl(336, 76%, 50%);
@@ -112,6 +113,9 @@ li strong {
 @media only screen and (max-width: 480px) {
   body {
     padding: 8px;
+  }
+  h1 {
+    font-size: 3em;
   }
   code, pre {
     white-space: pre-wrap;
@@ -129,7 +133,7 @@ li strong {
 
 <header>
   <div id="download">
-    <a href="#docs">Docs</a> | <a href="https://github.com/adammark/Chartlets">Download</a>
+    <a href="https://github.com/adammark/Chartlets/tree/master/src">Download</a>
   </div>
   <h1>Chartlets</h1>
   <h2>(Tiny charts for tablet and mobile web apps.)</h2>
@@ -137,34 +141,32 @@ li strong {
 
 <section id="showcase-line">
   <h3>Line charts</h3>
-  <canvas class="chartlet" data-type="line" data-colors="#ffcc00 #ff66cc" data-range="0 10" data-sets="[1 5 3 9 4] [4 3 9 7 2]" width="100" height="55" data-opts="stroke:2 shape:smooth"></canvas>
-  <canvas class="chartlet" data-type="line" data-colors="#ffcc00 #9966ff" data-range="0 10" data-sets="[1 5 3 9 4] [4 3 9 7 2]" width="100" height="55" data-opts="stroke:2 shape:smooth cap:circle"></canvas>
-  <canvas class="chartlet" data-type="line" data-range="0 10" data-sets="[1 5 3 9 4] [4 3 9 7 2]" width="100" height="55" data-opts="stroke:1 shape:smooth fill:solid theme:blues"></canvas>
-  <canvas class="chartlet" data-type="line" data-colors="hsla(319,83%,65%) hsl(200,83%,50%)" data-sets="[10 15 10 16 20 15 16 14 9] [5 12 15 20 14 -2 -5 8 15]" width="100" height="55" data-opts="stroke:1 fill:solid axis:0"></canvas>
-  <canvas class="chartlet" data-type="line" data-range="0 15" data-sets="[1 3 2 4 5 3 4 2 3 4 2 3 3 2 3 4 5 2 3 4] [7 8 7 6 7 9 8 7 8 7 7 6 6 5 6 7 6 7 5 6] [10 11 12 12 10 13 14 15 12 10 11 11 13 14 13 12 10 11 12 10]" width="100" height="55" data-opts="stroke:2 theme:money"></canvas>
-  <canvas class="chartlet" data-type="line" data-sets="[1 5 3 9 4] [4 3 4 7 2] [1 2 3 3 2]" width="100" height="55" data-opts="stroke:1 shape:smooth transform:stack theme:money"></canvas>
-  <canvas class="chartlet" data-type="line" data-sets="[3 2 4 5 3] [3 2 3 1 1] [1 1 2 3 1]" width="100" height="55" data-opts="stroke:2 shape:smooth transform:stack theme:circus alpha:0.65"></canvas>
-  <canvas class="chartlet" data-type="line" data-colors="rgb(255,168,57)" data-range="0 10" data-sets="[2 3 7 6 8 7 6 1 3 7]" width="100" height="55" data-opts="stroke:3 shape:step"></canvas>
-  <canvas class="chartlet" data-type="line" data-colors="#fc0 rgba(200,135,12,0.5)" data-range="0 10" data-sets="[2 3 7 6 8 7 6 1 3 7] [5 6 5 3 5 9 8 9 8 5]" width="100" height="55" data-opts="stroke:1 cap:square axis:5"></canvas>
-  <canvas class="chartlet" data-type="line" data-colors="#03a" data-sets="[1 2 6 3 7 2 3 3 1 2 3 4 2 3 3 2 3 2 3 5 3 2 3 2]" width="100" height="55" data-opts="stroke:1 shape:step fill:solid"></canvas>
-  <canvas class="chartlet" data-type="line" data-colors="hsl(336, 76%, 50%)" data-range="0 15" data-sets="[7 8 7 6 7 9 8 7 8 7 7 6 6 5 6 6 7 8 9 8 7 9 7 9 7 9 8 9 8 9 8 9 8 7 5 4 6]" width="100" height="55" data-opts="stroke:2"></canvas>
-  <canvas class="chartlet" data-type="line" data-colors="#cf0 #fc0" data-range="0 10" data-sets="[1 5 3 9 4] [4 3 9 7 2]" width="100" height="55" data-opts="stroke:3 shape:smooth bgcolor:#006"></canvas>
+  <canvas class="chartlet" data-type="line" data-colors="#ffcc00 #ff66cc" data-range="0 10" data-sets="[1 5 3 9 4] [4 3 9 7 2]" width="90" height="50" data-opts="stroke:2 shape:smooth"></canvas>
+  <canvas class="chartlet" data-type="line" data-colors="#ffcc00 #9966ff" data-range="0 10" data-sets="[1 5 3 9 4] [4 3 9 7 2]" width="90" height="50" data-opts="stroke:2 shape:smooth cap:circle"></canvas>
+  <canvas class="chartlet" data-type="line" data-range="0 10" data-sets="[1 5 3 9 4] [4 3 9 7 2]" width="90" height="50" data-opts="stroke:1 shape:smooth fill:solid theme:blues"></canvas>
+  <canvas class="chartlet" data-type="line" data-range="0 10" data-sets="[1 5 3 9 4] [4 3 9 7 2]" width="90" height="50" data-opts="stroke:3 cap:square theme:money"></canvas>
+  <canvas class="chartlet" data-type="line" data-sets="[1 5 3 9 4] [4 3 4 7 2] [1 2 3 3 2]" width="90" height="50" data-opts="stroke:1 shape:smooth transform:stack theme:fire"></canvas>
+  <canvas class="chartlet" data-type="line" data-colors="rgb(255,168,57)" data-range="0 10" data-sets="[2 3 7 6 8 7 6 1 3 7]" width="90" height="50" data-opts="stroke:3 shape:step"></canvas>
+  <canvas class="chartlet" data-type="line" data-colors="#fc0 rgba(200,135,12,0.5)" data-range="0 10" data-sets="[2 3 7 6 8 7 6 1 3 7] [5 6 5 3 5 9 8 9 8 5]" width="90" height="50" data-opts="stroke:2 cap:square axis:5"></canvas>
+  <canvas class="chartlet" data-type="line" data-colors="#03a" data-sets="[1 2 6 3 7 2 3 3 1 2 3 4 2 3 3 2 3 2 3 5 3 2 3 2]" width="90" height="50" data-opts="stroke:1 shape:step fill:solid"></canvas>
+  <canvas class="chartlet" data-type="line" data-colors="hsl(336, 76%, 50%)" data-range="0 15" data-sets="[7 8 7 6 7 9 8 7 8 7 7 6 6 5 6 6 7 8 9 8 7 9 7 9 7 9 8 9 8 9 8 9 8 7 5 4 6]" width="90" height="50" data-opts="stroke:2"></canvas>
+  <canvas class="chartlet" data-type="line" data-colors="#cf0 #fc0" data-range="0 10" data-sets="[1 5 3 9 4] [4 3 9 7 2]" width="90" height="50" data-opts="stroke:3 shape:smooth bgcolor:#006"></canvas>
 </section>
 
 <section id="showcase-bar">
   <h3>Bar charts</h3>
-  <canvas class="chartlet" data-type="bar" data-colors="rgb(249,40,48) rgb(47,180,177) rgb(255,168,57)" data-range="0 15" data-sets="[1 2 3 4] [2 3 4 5] [3 4 5 6]" width="100" height="50" data-opts="transform:stack"></canvas>
-  <canvas class="chartlet" data-type="bar" data-range="0 15" data-sets="[1 2 3 4] [2 3 4 5] [3 4 5 6]" width="100" height="50" data-opts="orient:horiz transform:stack theme:ocean"></canvas>
-  <canvas class="chartlet" data-type="bar" data-colors="hsl(34,57%,50%) hsl(194,67%,50%) hsl(49,89%,60%)" data-sets="[1 2 3 4] [2 3 4 5] [3 4 5 6]" width="100" height="50"></canvas>
-  <canvas class="chartlet" data-type="bar" data-sets="[1 2 -3 -4] [2 3 -2 -3]" width="100" height="50" data-opts="theme:money axis:0"></canvas>
-  <canvas class="chartlet" data-type="bar" data-range="0 6" data-sets="[3] [4] [2] [3] [5]" width="100" height="50" data-opts="theme:blues"></canvas>
+  <canvas class="chartlet" data-type="bar" data-colors="rgb(249,40,48) rgb(47,180,177) rgb(255,168,57)" data-sets="[1 2 3 4 5 6] [2 3 4 5 6 7] [3 4 5 6 7 8]" width="90" height="50" data-opts="transform:stack"></canvas>
+  <canvas class="chartlet" data-type="bar" data-range="0 15" data-sets="[1 2 3 4] [2 3 4 5] [3 4 5 6]" width="90" height="50" data-opts="orient:horiz transform:stack theme:ocean"></canvas>
+  <canvas class="chartlet" data-type="bar" data-colors="hsl(34,57%,50%) hsl(194,67%,50%) hsl(49,89%,60%)" data-sets="[1 2 3 4] [2 3 4 5] [3 4 5 6]" width="90" height="50"></canvas>
+  <canvas class="chartlet" data-type="bar" data-sets="[1 2 -3 -4 2 3] [2 3 -2 -3 3 5]" width="90" height="50" data-opts="theme:money axis:0"></canvas>
+  <canvas class="chartlet" data-type="bar" data-range="0 6" data-sets="[3] [4] [2] [3] [5]" width="90" height="50" data-opts="theme:crayon"></canvas>
 </section>
 
 <section id="showcase-pie">
   <h3>Pie charts</h3>
-  <canvas class="chartlet" data-type="pie" data-sets="[1 2 3]" width="75" height="75" data-opts="theme:blues"></canvas>
-  <canvas class="chartlet" data-type="pie" data-sets="[1 2 3 4 5]" width="75" height="75" data-opts="theme:circus"></canvas>
-  <canvas class="chartlet" data-type="pie" data-sets="[15 35 20 15 10]" width="75" height="75" data-opts="theme:money"></canvas>
+  <canvas class="chartlet" data-type="pie" data-sets="[1 2 3]" width="70" height="70" data-opts="theme:blues"></canvas>
+  <canvas class="chartlet" data-type="pie" data-sets="[1 2 3 4 5]" width="70" height="70" data-opts="theme:circus"></canvas>
+  <canvas class="chartlet" data-type="pie" data-sets="[15 35 20 15 10]" width="70" height="70" data-opts="theme:money"></canvas>
 </section>
 
 <header id="docs">
@@ -174,13 +176,12 @@ li strong {
 <section id="intro">
   <h3>What are Chartlets?</h3>
   <p>Chartlets are tiny charts without grids or legends, like <a href="http://en.wikipedia.org/wiki/Sparklines">Sparklines</a>. They're perfect for conveying simple relationships or trends, especially when space is scarce.</p>
-  <p>Yes, legends are important. With Chartlets, you can create your own legends in HTML and present them in a way that makes sense for your app. A single legend can apply to multiple Chartlets in order to conserve space and improve readability.</p>
-  <p>Chartlets uses the HTML5 <a href="http://diveintohtml5.info/canvas.html"><code>&lt;canvas&gt;</code></a> element and is only 2.8k when minified and gzipped. It has no dependencies.</p>
+  <p>Chartlets uses the HTML5 <a href="http://diveintohtml5.info/canvas.html"><code>&lt;canvas&gt;</code></a> element for fast performance and is only 2.8k when minified and gzipped. It has no dependencies.</p>
 </section>
 
 <section id="usage">
   <h3>Usage</h3>
-  <p>1. <a href="https://github.com/adammark/Chartlets">Download</a> and include <code>&lt;script src="chartlets.min.js"&gt;&lt;/script&gt;.</code></p>
+  <p>1. <a href="https://github.com/adammark/Chartlets/tree/master/src">Download</a> and include <code>&lt;script src="chartlets.min.js"&gt;&lt;/script&gt;.</code></p>
   <p>2. Create a <code>&lt;canvas&gt;</code> element with a width, height, and the class name "chartlet." Then add HTML5 data attributes as described below.</p>
   <p>3. Call <code>Chartlets.render()</code>.</p>
 </section>
@@ -329,8 +330,8 @@ li strong {
 
   <h4>Global options</h4>
   <ul>
-    <li><p><strong>bgcolor</strong> sets the background color of the entire chart. It can be in hex, RGB(A) or HSL(A) notation. The default value is <code>#fff</code> (white).</p></li>
-    <li><p><strong>theme</strong> sets the color theme for the data visualization, overriding any colors specified in <code>data-colors</code>. If no theme is specified and <code>data-colors</code> is empty, the "blues" theme is applied.</p></li>
+    <li><p><strong>bgcolor</strong> sets the background color of the entire chart. It can be in hex, RGB(A) or HSL(A) notation. The background is transparent by default.</p></li>
+    <li><p><strong>theme</strong> sets the color theme for the chart data, overriding any colors specified in <code>data-colors</code>. If no theme is specified and <code>data-colors</code> is empty, the "blues" theme is applied.</p></li>
   </ul>
 
   <h4>Line options</h4>
