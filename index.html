@@ -10,8 +10,6 @@
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black" />
 
-<!-- <link href='http://fonts.googleapis.com/css?family=Varela+Round' rel='stylesheet' type='text/css'> -->
-
 <script src="chartlets.min.js"></script>
 <style>
 .chartlet {
@@ -32,17 +30,14 @@ footer {
   color: #999;
 }
 h1, h2, h3 {
-  /*font-family: 'Varela Round', Helvetica, Arial;*/
+  font-family: Helvetica, Arial;
   font-weight: normal;
-}
-h1, h2, h3 {
   color: #222;
   margin: 0;
   padding: 0;
 }
 h1 {
   font-size: 3.75em;
-  /*margin: -25px 0 -35px 2px;*/
 }
 h2 {
   font-size: 1.7em;
@@ -235,7 +230,7 @@ li strong {
 
 <section id="types">
   <h3>Chart Types</h3>
-  <p>Chartlets supports three basic chart types:</p>
+  <p>Chartlets includes three basic chart types:</p>
   <p><code>&lt;canvas class="chartlet" <span class="highlight">data-type="line"</span> ...&gt;&lt;/canvas&gt;</code></p>
   <p><code>&lt;canvas class="chartlet" <span class="highlight">data-type="bar"</span> ...&gt;&lt;/canvas&gt;</code></p>
   <p><code>&lt;canvas class="chartlet" <span class="highlight">data-type="pie"</span> ...&gt;&lt;/canvas&gt;</code></p>
@@ -445,15 +440,13 @@ setInterval(function() {
 <section id="custom">
   <h3>Custom Chart Types</h3>
 
-  <p>You can create your own chart type by setting a custom renderer, which gives you access to the canvas context and chart data. For example, say you want to render a smiley face whose depth and breadth of smile depends on runtime values:</p>
-
-<h4>Sample HTML</h4>
+  <p>You can create your own chart type by writing a custom renderer. For example, say you want to draw a smiley face with a configurable smile:</p>
 
 <code>
 &lt;canvas class="chartlet" id="smiley1" data-type="<span class="highlight">smiley</span>" data-sets="[1 2] [3 4]" width="75" height="75" data-opts="gender:male hair:yes"&gt;&lt;/canvas&gt;
 </code>
 
-<h4>Sample JavaScript</h4>
+<p>The <code>setRenderer</code> method accepts a chart type and rendering function, which gives you direct access to the canvas context, chart data and other properties:</p>
 
 <pre>
 Chartlets.setRenderer("<span class="highlight">smiley</span>", <span class="highlight">function (ctx, width, height, sets, opts)</span> {
@@ -467,10 +460,10 @@ Chartlets.setRenderer("<span class="highlight">smiley</span>", <span class="high
 });
 </pre>
 
-<p>Transitions can apply to custom chart types. In the above example, a smiley face might morph from a smile to a frown when the chart is updated:</p>
+<p>Transitions should work without any additional logic. Following on the above example, a smiley face might transition from a smile to a frown when the chart is updated:</p>
 
 <code>
-Chartlets.update("smiley1", <span class="highlight">[[4,3], [2,1]]</span>, { transition: "linear" });
+Chartlets.update("smiley1", [[4,3], [2,1]], { transition: "linear" });
 </code>
 
 </section>
