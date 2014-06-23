@@ -145,7 +145,7 @@ li strong {
   <canvas class="chartlet" data-type="line" data-colors="#ffcc00 #9966ff" data-range="0 10" data-sets="[1 5 3 9 4] [4 3 9 7 2]" width="90" height="50" data-opts="stroke:2 shape:smooth cap:circle"></canvas>
   <canvas class="chartlet" data-type="line" data-range="0 10" data-sets="[1 5 3 9 4] [4 3 9 7 2]" width="90" height="50" data-opts="stroke:1 shape:smooth fill:solid theme:blues"></canvas>
   <canvas class="chartlet" data-type="line" data-range="0 10" data-sets="[1 5 3 9 4] [4 3 9 7 2]" width="90" height="50" data-opts="stroke:3 cap:square theme:money"></canvas>
-  <canvas class="chartlet" data-type="line" data-sets="[1 5 3 9 4] [4 3 4 7 2] [1 2 3 3 2]" width="90" height="50" data-opts="stroke:1 shape:smooth transform:stack theme:fire"></canvas>
+  <canvas class="chartlet" data-type="line" data-sets="[1 5 3 9 4] [4 3 4 7 2] [1 2 3 3 2]" width="90" height="50" data-opts="stroke:1 shape:smooth transform:stack theme:garden"></canvas>
   <canvas class="chartlet" data-type="line" data-colors="rgb(255,168,57)" data-range="0 10" data-sets="[2 3 7 6 8 7 6 1 3 7]" width="90" height="50" data-opts="stroke:3 shape:step"></canvas>
   <canvas class="chartlet" data-type="line" data-colors="#fc0 rgba(200,135,12,0.5)" data-range="0 10" data-sets="[2 3 7 6 8 7 6 1 3 7] [5 6 5 3 5 9 8 9 8 5]" width="90" height="50" data-opts="stroke:2 cap:square axis:5"></canvas>
   <canvas class="chartlet" data-type="line" data-colors="#03a" data-sets="[1 2 6 3 7 2 3 3 1 2 3 4 2 3 3 2 3 2 3 5 3 2 3 2]" width="90" height="50" data-opts="stroke:1 shape:step fill:solid"></canvas>
@@ -167,6 +167,13 @@ li strong {
   <canvas class="chartlet" data-type="pie" data-sets="[1 2 3]" width="70" height="70" data-opts="theme:blues"></canvas>
   <canvas class="chartlet" data-type="pie" data-sets="[1 2 3 4 5]" width="70" height="70" data-opts="theme:circus"></canvas>
   <canvas class="chartlet" data-type="pie" data-sets="[15 35 20 15 10]" width="70" height="70" data-opts="theme:money"></canvas>
+</section>
+
+<section id="showcase-custom">
+  <h3>Custom charts</h3>
+  <canvas class="chartlet" data-type="brick" data-sets="[30 20 10]" data-colors="#e00 #0c0 #fc0" width="70" height="70"></canvas>
+  <canvas class="chartlet" data-type="brick" data-sets="[10 20 30 40]" data-opts="theme:party" width="70" height="70"></canvas>
+  <canvas class="chartlet" data-type="brick" data-sets="[5 10 10]" data-opts="theme:blues" width="70" height="70"></canvas>
 </section>
 
 <header id="docs">
@@ -318,9 +325,14 @@ li strong {
 
   <code>Chartlets.setTheme("rainbow", ["#eb1f1f", "#fcb13a", "#ffd026"]);</code>
 
-  <p>To load colors for a particular theme:</p>
+  <p>To load the current color set:</p>
+
+  <code>var colors = Chartlets.getTheme();</code>
+
+  <p>Or to load colors for a particular theme:</p>
 
   <code>var colors = Chartlets.getTheme("money");</code>
+
 </section>
 
 <section id="options">
@@ -427,6 +439,40 @@ setInterval(function() {
     <canvas id="tx_pie" class="chartlet" data-type="pie" data-sets="[1 1 1 1 1 1 1 1]" data-colors="#9351a4 #ff99cc #e31a1c #66cdaa #ffcc33 #f92830 #2fb4b1 #ffa839" width="65" height="65"></canvas>
     <button onclick="tx_demo('tx_pie')">Update</button>
   </div>
+
+</section>
+
+<section id="custom">
+  <h3>Custom Chart Types</h3>
+
+  <p>You can create your own chart type by setting a custom renderer, which gives you access to the canvas context and chart data. For example, say you want to render a smiley face whose depth and breadth of smile depends on runtime values:</p>
+
+<h4>Sample HTML</h4>
+
+<code>
+&lt;canvas class="chartlet" id="smiley1" data-type="<span class="highlight">smiley</span>" data-sets="[1 2] [3 4]" width="75" height="75" data-opts="gender:male hair:yes"&gt;&lt;/canvas&gt;
+</code>
+
+<h4>Sample JavaScript</h4>
+
+<pre>
+Chartlets.setRenderer("<span class="highlight">smiley</span>", <span class="highlight">function (ctx, width, height, sets, opts)</span> {
+  // width = 75
+  // height = 75
+  // sets = [[1,2], [3,4]]
+  // opts = { gender: "male", hair: "yes" }
+  // colors = Chartlets.getTheme()
+
+  // now draw into ctx
+});
+</pre>
+
+<p>Transitions can apply to custom chart types. In the above example, a smiley face might morph from a smile to a frown when the chart is updated:</p>
+
+<code>
+Chartlets.update("smiley1", <span class="highlight">[[4,3], [2,1]]</span>, { transition: "linear" });
+</code>
+
 </section>
 
 <section id="notes">
@@ -445,46 +491,111 @@ setInterval(function() {
 </footer>
 
 <script>
-  Chartlets.render();
+Chartlets.setRenderer("brick", function (ctx, width, height, sets, opts) {
+  function circle(color, x, y, r) {
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.arc(x, y, r, 2 * Math.PI, false);
+    ctx.fill();
+  }
 
-  (function () {
-    var a = [2, 3, 5, 3, 6, 3, 7, 8, 4, 2];
-    var b = [8, 3, 4, 7, 2, 7, 2, 4, 6, 1];
+  function rect(color, x, y, w, h) {
+    ctx.fillStyle = color;
+    ctx.fillRect(x, y - h, w, h);
+  }
 
-    setInterval(function() {
-      a.push(Math.ceil(Math.random() * 9));
-      b.push(Math.ceil(Math.random() * 9));
-      a.shift();
-      b.shift();
+  function sumSet(set) {
+    var i, n = 0;
 
-      Chartlets.update("demo1", [a, b]);
-    }, 500);
-  }());
-
-  (function () {
-    var a = 0;
-
-    setInterval(function() {
-      if (++a > 100) {
-        a = 0;
-      }
-
-      Chartlets.update("demo2", [[a, 100 - a]]);
-    }, 50);
-  }());
-
-  function tx_demo(id) {
-    var a = [];
-    var b = [];
-    var i;
-
-    for (i = 0; i < 8; i++) {
-      a[i] = Math.ceil(Math.random() * 7);
-      b[i] = Math.ceil(Math.random() * 7);
+    for (i = 0; i < set.length; i++) {
+      n += +set[i];
     }
 
-    Chartlets.update(id, [a, b], { transition: "linear" });
+    return n;
   }
+
+  var i;
+  var set = sets[0];
+  var sum = sumSet(set);
+  var m = Math.min((width * height) / 100, sum);
+  var z = opts.basis ? Math.max(opts.basis, m) : m;
+  var c = 0;
+  var t = [set[0] / sum];
+  var n = Math.ceil(width / Math.sqrt((width * height) / z));
+  var o = Math.ceil(z / n);
+  var p = 2;
+  var w = Math.min((width - (p * (n-1))) / n, (height - (p * (o-1))) / o);
+  var x1 = opts.shape === "circle" ? w / 2 : 0;
+  var y1 = x1;
+  var x = x1;
+  var y = y1;
+  var colors = Chartlets.getTheme();
+
+  for (i = 1; i < set.length; i++) {
+    t.push(t[i - 1] + (set[i] / sum));
+  }
+
+  for (i = 0; i < m; i++) {
+    if (i && i % n == 0) {
+      x = x1;
+      y += w + p;
+    }
+
+    if (i / m >= t[c]) {
+      c++;
+    }
+
+    if (opts.shape === "circle") {
+      circle(colors[c], x, y, w / 2);
+    }
+    else {
+      rect(colors[c], x, y, w, -w);
+    }
+
+    x += w + p;
+  }
+});
+
+Chartlets.render();
+
+(function () {
+  var a = [2, 3, 5, 3, 6, 3, 7, 8, 4, 2];
+  var b = [8, 3, 4, 7, 2, 7, 2, 4, 6, 1];
+
+  setInterval(function() {
+    a.push(Math.ceil(Math.random() * 9));
+    b.push(Math.ceil(Math.random() * 9));
+    a.shift();
+    b.shift();
+
+    Chartlets.update("demo1", [a, b]);
+  }, 500);
+}());
+
+(function () {
+  var a = 0;
+
+  setInterval(function() {
+    if (++a > 100) {
+      a = 0;
+    }
+
+    Chartlets.update("demo2", [[a, 100 - a]]);
+  }, 50);
+}());
+
+function tx_demo(id) {
+  var a = [];
+  var b = [];
+  var i;
+
+  for (i = 0; i < 8; i++) {
+    a[i] = Math.ceil(Math.random() * 7);
+    b[i] = Math.ceil(Math.random() * 7);
+  }
+
+  Chartlets.update(id, [a, b], { transition: "linear" });
+}
 </script>
 
 </body>
