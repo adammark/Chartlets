@@ -32,7 +32,8 @@
   renderers = {
     "line": renderLineChart,
     "bar": renderBarChart,
-    "pie": renderPieChart
+    "pie": renderPieChart,
+    "donut": renderDonutChart
   };
 
   // Built-in color themes. A theme can have any number of colors (as hex, RGB/A, or HSL/A)
@@ -582,6 +583,12 @@
       ctx.fill();
       a1 = a2;
     }
+  }
+
+  // Render a donut chart
+  function renderDonutChart() {
+    renderPieChart();
+    drawCircle(opts.bgcolor || "#fff", width / 2, height / 2, Math.min(width, height) / 4);
   }
 
   // Render or re-render the chart for the given element
