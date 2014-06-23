@@ -18,6 +18,8 @@ canvas {
 
 <canvas id="test_1" class="chartlet" data-type="line" data-sets="[1 2 3 4 5 6 7 8 9 10] [10 9 8 7 6 5 4 3 2 1]" data-colors="#f00 #00f" width="150" height="55" data-opts="cap:circle"></canvas>
 
+<canvas id="test_1a" class="chartlet" data-type="line" data-sets="[1 2 3 4 5 6 7 8 9 10] [10 9 8 7 6 5 4 3 2 1]" data-colors="#f00 #00f" width="150" height="55" data-opts="cap:circle shape:smooth"></canvas>
+
 <canvas id="test_2" class="chartlet" data-type="line" data-sets="[1 2 3 4 5 6 7 8 9 10] [10 9 8 7 6 5 4 3 2 1]" data-colors="#f00 #00f" width="150" height="55" data-opts="fill:solid"></canvas>
 
 <canvas id="test_3" class="chartlet" data-type="line" data-sets="[1 2 3 4 5 6 7 8 9 10] [10 9 8 7 6 5 4 3 2 1]" data-colors="#f00 #00f" width="150" height="55" data-opts="transform:stack"></canvas>
@@ -64,6 +66,72 @@ canvas {
 <button onclick="updateAll()">update all</button>
 
 <script>
+Chartlets.setRenderer("brick", function (ctx, width, height, sets, opts) {
+  function circle(color, x, y, r) {
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.arc(x, y, r, 2 * Math.PI, false);
+    ctx.fill();
+  }
+
+  function rect(color, x, y, w, h) {
+    ctx.fillStyle = color;
+    ctx.fillRect(x, y - h, w, h);
+  }
+
+  function sumSet(set) {
+    var i, n = 0;
+
+    for (i = 0; i < set.length; i++) {
+      n += +set[i];
+    }
+
+    return n;
+  }
+
+  var i;
+  var set = sets[0];
+  var sum = sumSet(set);
+  var m = Math.min((width * height) / 100, sum); // number of dots
+  var z = opts.basis ? Math.max(opts.basis, m) : m;
+  var c = 0;
+  var t = [set[0] / sum];
+  var n = Math.ceil(width / Math.sqrt((width * height) / z)); // dots per row
+  var o = Math.ceil(z / n); // dots per col
+  var p = 2; // padding between dots
+  var w = Math.min((width - (p * (n-1))) / n, (height - (p * (o-1))) / o);
+  var x1 = opts.shape === "circle" ? w / 2 : 0; // x origin
+  var y1 = x1; // y origin
+  var x = x1; // current x
+  var y = y1; // current y
+  var colors = Chartlets.getTheme();
+
+  for (i = 1; i < set.length; i++) {
+    t.push(t[i - 1] + (set[i] / sum));
+  }
+
+  // left to right, top to bottom
+  for (i = 0; i < m; i++) {
+    if (i && i % n == 0) {
+      x = x1;
+      y += w + p;
+    }
+
+    if (i / m >= t[c]) {
+      c++;
+    }
+
+    if (opts.shape === "circle") {
+      circle(colors[c], x, y, w / 2);
+    }
+    else {
+      rect(colors[c], x, y, w, -w);
+    }
+
+    x += w + p;
+  }
+});
+
 Chartlets.render();
 
 function update(id) {

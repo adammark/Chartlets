@@ -32,8 +32,7 @@
   renderers = {
     "line": renderLineChart,
     "bar": renderBarChart,
-    "pie": renderPieChart,
-    "brick": renderBrickChart
+    "pie": renderPieChart
   };
 
   // Built-in color themes. A theme can have any number of colors (as hex, RGB/A, or HSL/A)
@@ -301,7 +300,7 @@
   }
 
   // Get the color string for the given index. Return black if undefined
-  function getColorForIndex(idx) {
+  function colorOf(idx) {
     return colors[idx] || "#000";
   }
 
@@ -387,22 +386,17 @@
       }
       else {
         w = lineWidth + 1;
-        drawCircle(fillStyle, null, x, y, w);
+        drawCircle(fillStyle, x, y, w);
       }
     }
   }
 
   // Draw a circle
-  function drawCircle(fillStyle, strokeStyle, x, y, r) {
+  function drawCircle(fillStyle, x, y, r) {
     ctx.fillStyle = fillStyle;
-    ctx.strokeStyle = strokeStyle;
     ctx.beginPath();
     ctx.arc(x, y, r, 2 * Math.PI, false);
     ctx.fill();
-
-    if (strokeStyle) {
-      ctx.stroke();
-    }
   }
 
   // Draw a rectangle from bottom left corner
@@ -500,7 +494,7 @@
 
     for (i = 0; i < sets.length; i++) {
       set = sets[i];
-      strokeStyle = getColorForIndex(i);
+      strokeStyle = colorOf(i);
 
       if (isStacked()) {
         set = mergeSets(sets.slice(0, i + 1));
@@ -556,7 +550,7 @@
           y = getYForValue(sumY(sets.slice(0, i + 1), j));
         }
 
-        drawRect(getColorForIndex(i), x, y, w, h);
+        drawRect(colorOf(i), x, y, w, h);
       }
     }
   }
@@ -574,7 +568,7 @@
     sum = sumSet(set);
 
     for (i = 0; i < set.length; i++) {
-      ctx.fillStyle = getColorForIndex(i);
+      ctx.fillStyle = colorOf(i);
       ctx.beginPath();
       a2 = a1 + (set[i] / sum) * (2 * Math.PI);
 
@@ -584,50 +578,6 @@
       ctx.fill();
       a1 = a2;
     }
-  }
-
-  function renderBrickChart() {
-    var i;
-    var set = sets[0];
-    var sum = sumSet(set);
-    var m = Math.min((width * height) / 100, sum); // number of dots
-    var z = opts.basis ? Math.max(opts.basis, m) : m;
-    var c = 0;
-    var t = [set[0] / sum];
-    var n = Math.ceil(width / Math.sqrt((width * height) / z)); // dots per row
-    var o = Math.ceil(z / n); // dots per col
-    var p = 2; // padding between dots
-    var w = Math.min((width - (p * (n-1))) / n, (height - (p * (o-1))) / o);
-    var x1 = opts.shape === "circle" ? w / 2 : 0; // x origin
-    var y1 = x1; // y origin
-    var x = x1; // current x
-    var y = y1; // current y
-
-    for (i = 1; i < set.length; i++) {
-      t.push(t[i - 1] + (set[i] / sum));
-    }
-
-    // left to right, top to bottom
-    for (i = 0; i < m; i++) {
-      if (i && i % n == 0) {
-        x = x1;
-        y += w + p;
-      }
-
-      if (i / m >= t[c]) {
-        c++;
-      }
-
-      if (opts.shape === "circle") {
-        drawCircle(getColorForIndex(c), null, x, y, w / 2);
-      }
-      else {
-        drawRect(getColorForIndex(c), x, y, w, -w);
-      }
-
-      x += w + p;
-    }
-
   }
 
   // Render or re-render the chart for the given element
@@ -661,7 +611,7 @@
     }
 
     try {
-      renderers[type]();
+      renderers[type](ctx, width, height, sets, opts);
     }
     catch (e) {
       console.error(e.message);
@@ -690,7 +640,11 @@
 
     // Get a color theme as an array of strings
     getTheme: function (name) {
-      return themes[name];
+      return name ? themes[name] : colors;
+    },
+
+    setRenderer: function (type, renderer) {
+      renderers[type] = renderer;
     },
 
     // Update data sets for the element with the given ID
