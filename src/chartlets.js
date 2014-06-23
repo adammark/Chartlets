@@ -84,10 +84,14 @@
   // Parse data-sets attribute. "[1 2] [3 4]" -> [[1,2], [3,4]]
   function parseSets(str) {
     // or "[[1,2], [3,4]]" -> [[1,2], [3,4]]
-    var sets = str.match(/\[[^\[]+\]/g) || [], i;
+    var sets = str.match(/\[[^\[]+\]/g) || [], i, j;
 
     for (i = 0; i < sets.length; i++) {
       sets[i] = sets[i].match(/[-\d\.]+/g);
+
+      for (j = 0; j < sets[i].length; j++) {
+        sets[i][j] = +sets[i][j];
+      }
     }
 
     return sets;
@@ -271,7 +275,7 @@
     var i, n = 0;
 
     for (i = 0; i < set.length; i++) {
-      n += +set[i];
+      n += set[i];
     }
 
     return n;
@@ -282,7 +286,7 @@
     var i, n = 0;
 
     for (i = 0; i < sets.length; i++) {
-      n += +sets[i][idx];
+      n += sets[i][idx];
     }
 
     return n;
