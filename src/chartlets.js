@@ -1,5 +1,5 @@
 /*
-  Chartlets v0.9.9: http://chartlets.com
+  Chartlets v0.9.10: http://chartlets.com
   MIT License
   (c) 2013 Adam Mark
 */
@@ -466,11 +466,11 @@
   }
 
   // Create a transition from one array of sets to another for the element with the given ID
-  function Transition(id, asets, bsets) {
+  function Transition(elem, asets, bsets) {
     var i = 1, j = 0, n = 8, interpolated = interpolateSets(asets, bsets, n);
 
     if (!asets.length) {
-      return Chartlets.update(id, bsets);
+      return Chartlets.update(elem, bsets);
     }
 
     function _render() {
@@ -480,7 +480,7 @@
         set.push(interpolated[j][i]);
       }
 
-      Chartlets.update(id, set);
+      Chartlets.update(elem, set);
 
       if (++i <= n) {
         animate(_render);
@@ -651,12 +651,14 @@
       renderers[type] = renderer;
     },
 
-    // Update data sets for the element with the given ID
-    update: function (id, sets, options) {
-      var elem = document.getElementById(id);
+    // Update data sets for the given element (or ID)
+    update: function (elem, sets, options) {
+      if (typeof elem === "string") {
+        elem = document.getElementById(elem);
+      }
 
       if (options && options.transition === "linear") {
-        new Transition(id, parseSets(elem.getAttribute("data-sets")), sets);
+        new Transition(elem, parseSets(elem.getAttribute("data-sets")), sets);
         return;
       }
 
